@@ -1,4 +1,4 @@
-# Multi-stage build for React app
+# ---------- Build Stage ----------
 FROM node:18-alpine as build
 
 # Set working directory
@@ -14,7 +14,7 @@ RUN npm install -g yarn
 # Install dependencies
 RUN yarn install --frozen-lockfile
 
-# Copy source code
+# Copy all project files
 COPY . .
 
 # Build arguments for environment variables
@@ -24,22 +24,26 @@ ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 ENV VITE_GA_MEASUREMENT_ID=$VITE_GA_MEASUREMENT_ID
 
 # Build the application
-RUN yarn run build
+RUN yarn build
 
-# Production stage with Nginx
+
+# ---------- Production Stage ----------
 FROM nginx:alpine
 
-# Copy built app from build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+# Set working dir inside container
+WORKDIR /usr/share/nginx/html
 
-# Copy custom nginx configuration
+# Copy build output
+COPY --from=build /app/dist .
+
+# Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 3001
-EXPOSE 3001
+# Expose port 5173
+EXPOSE 5173
 
-# Update nginx to listen on port 3001
-RUN sed -i 's/listen 80;/listen 3001;/' /etc/nginx/conf.d/default.conf
+# Update nginx default config to listen on 5173 instead of 80
+RUN sed -i 's/listen 80;/listen 5173;/' /etc/nginx/conf.d/default.conf
 
-# Start nginx
+# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
