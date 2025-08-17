@@ -6,13 +6,13 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-COPY pnpm-lock.yaml ./
+COPY yarn.lock ./
 
-# Install pnpm
-RUN npm install -g pnpm
+# Install yarn
+RUN npm install -g yarn
 
 # Install dependencies
-RUN pnpm install
+RUN yarn install --frozen-lockfile
 
 # Copy source code
 COPY . .
@@ -24,7 +24,7 @@ ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 ENV VITE_GA_MEASUREMENT_ID=$VITE_GA_MEASUREMENT_ID
 
 # Build the application
-RUN pnpm run build
+RUN yarn run build
 
 # Production stage with Nginx
 FROM nginx:alpine
@@ -35,8 +35,11 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Copy custom nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
-EXPOSE 80
+# Expose port 3001
+EXPOSE 3001
+
+# Update nginx to listen on port 3001
+RUN sed -i 's/listen 80;/listen 3001;/' /etc/nginx/conf.d/default.conf
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]
