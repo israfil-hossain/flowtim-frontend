@@ -7,7 +7,10 @@ import { getAllWorkspacesUserIsMemberQueryFn } from "@/lib/api";
 
 const AuthRoute = () => {
   const location = useLocation();
-  const { data: authData, isLoading, error } = useAuth(true); // Enable auth check
+  const _isAuthRoute = isAuthRoute(location.pathname);
+  
+  // Only enable auth check if not on auth routes to prevent unnecessary API calls
+  const { data: authData, isLoading, error } = useAuth(!_isAuthRoute);
   const user = authData?.user;
 
   // Fetch user's workspaces if user is authenticated
@@ -17,7 +20,10 @@ const AuthRoute = () => {
     enabled: !!user, // Only fetch if user exists
   });
 
-  const _isAuthRoute = isAuthRoute(location.pathname);
+  // If we're on an auth route, just show the outlet (no need to check auth)
+  if (_isAuthRoute) {
+    return <Outlet />;
+  }
 
   // If there's an auth error or user is explicitly null/undefined, show auth routes
   if (error || (!isLoading && !user)) {

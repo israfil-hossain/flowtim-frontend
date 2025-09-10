@@ -18,8 +18,16 @@ API.interceptors.response.use(
   async (error) => {
     const { data, status } = error.response || {};
 
+    // Only redirect on 401 if we're not already on an auth page
     if (status === 401) {
-      window.location.href = "/";
+      const currentPath = window.location.pathname;
+      const authPages = ["/sign-in", "/sign-up", "/", "/auth/google/callback/success", "/auth/google/callback/failure"];
+      const isAuthPage = authPages.includes(currentPath);
+      
+      // Only redirect if not already on an auth page to prevent infinite loops
+      if (!isAuthPage) {
+        window.location.href = "/";
+      }
     }
 
     const customError: CustomError = {
