@@ -203,18 +203,7 @@ const DataTableFilterToolbar: FC<DataTableFilterToolbarProps> = ({
   return (
     <div className="flex flex-col lg:flex-row w-full items-start space-y-2 mb-2 lg:mb-0 lg:space-x-2  lg:space-y-0">
       <div className="flex items-center space-x-2">
-        <Input
-          placeholder="Filter tasks..."
-          value={filters.keyword || ""}
-          onChange={(e) =>
-            setFilters({
-              keyword: e.target.value,
-            })
-          }
-          className="h-8 w-full lg:w-[250px]"
-        />
-        
-        {/* View Toggle */}
+         {/* View Toggle */}
         {onViewModeChange && (
           <ToggleGroup
             type="single"
@@ -222,7 +211,7 @@ const DataTableFilterToolbar: FC<DataTableFilterToolbarProps> = ({
             onValueChange={(value: string) => {
               if (value) onViewModeChange(value as ViewMode);
             }}
-            className="h-8"
+            className="h-9"
           >
             <ToggleGroupItem value="list" aria-label="List View" size="sm">
               <List className="h-3 w-3" />
@@ -235,6 +224,17 @@ const DataTableFilterToolbar: FC<DataTableFilterToolbarProps> = ({
             </ToggleGroupItem>
           </ToggleGroup>
         )}
+
+        <Input
+          placeholder="Filter tasks..."
+          value={filters.keyword || ""}
+          onChange={(e) =>
+            setFilters({
+              keyword: e.target.value,
+            })
+          }
+          className="h-8 w-full lg:w-[250px]"
+        />
       </div>
 
       <div className="flex flex-wrap gap-2">
