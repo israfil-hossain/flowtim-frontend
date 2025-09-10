@@ -5,7 +5,8 @@ export const isAuthRoute = (pathname: string): boolean => {
 export const AUTH_ROUTES = {
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
-  GOOGLE_OAUTH_CALLBACK: "/auth/google/callback/failure",
+  GOOGLE_OAUTH_CALLBACK_SUCCESS: "/auth/google/callback/success",
+  GOOGLE_OAUTH_CALLBACK_FAILURE: "/auth/google/callback/failure",
 };
 
 export const PROTECTED_ROUTES = {

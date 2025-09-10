@@ -29,7 +29,11 @@ const LogoutDialog = (props: {
       queryClient.resetQueries({
         queryKey: ["authUser"],
       });
-      navigate("/");
+      queryClient.resetQueries({
+        queryKey: ["userWorkspaces"],
+      });
+      queryClient.clear(); // Clear all cached queries
+      navigate("/sign-in");
       setIsOpen(false);
     },
     onError: (error) => {

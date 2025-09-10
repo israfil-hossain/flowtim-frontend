@@ -35,7 +35,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     isLoading,
     isFetching,
     refetch: refetchAuth,
-  } = useAuth();
+  } = useAuth(false); // Disable automatic fetching by default
   const user = authData?.user;
 
   const {
