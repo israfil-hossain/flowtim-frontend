@@ -11,6 +11,17 @@ const options = {
 
 const API = axios.create(options);
 
+// Add request interceptor to debug cookie issues in production
+if (import.meta.env.PROD) {
+  API.interceptors.request.use((config) => {
+    console.log(`🔗 API Request: ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
+    console.log('📍 Origin:', window.location.origin);
+    console.log('🍪 Document cookies:', document.cookie ? 'Present' : 'None');
+    console.log('⚙️ withCredentials:', config.withCredentials);
+    return config;
+  });
+}
+
 API.interceptors.response.use(
   (response) => {
     return response;

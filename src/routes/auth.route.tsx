@@ -9,25 +9,27 @@ const AuthRoute = () => {
   const location = useLocation();
   const _isAuthRoute = isAuthRoute(location.pathname);
   
-  // Only enable auth check if not on auth routes to prevent unnecessary API calls
-  const { data: authData, isLoading, error } = useAuth(!_isAuthRoute);
+  // If we're on an auth route (including landing page), just show the outlet without auth checks
+  if (_isAuthRoute) {
+    return <Outlet />;
+  }
+
+  // Only enable auth check for non-auth routes
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { data: authData, isLoading, error } = useAuth(true);
   const user = authData?.user;
 
   // Fetch user's workspaces if user is authenticated
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data: workspacesData, isLoading: workspacesLoading } = useQuery({
     queryKey: ["userWorkspaces"],
     queryFn: getAllWorkspacesUserIsMemberQueryFn,
     enabled: !!user, // Only fetch if user exists
   });
 
-  // If we're on an auth route, just show the outlet (no need to check auth)
-  if (_isAuthRoute) {
-    return <Outlet />;
-  }
-
-  // If there's an auth error or user is explicitly null/undefined, show auth routes
+  // If there's an auth error or user is explicitly null/undefined, redirect to login
   if (error || (!isLoading && !user)) {
-    return <Outlet />;
+    return <Navigate to="/sign-in" replace />;
   }
 
   // Show loading only for non-auth routes
