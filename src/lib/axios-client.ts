@@ -1,5 +1,6 @@
 import { CustomError } from "@/types/custom-error.type";
 import axios from "axios";
+import { attemptAuthRecovery } from "./auth-fallback";
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -43,16 +44,35 @@ API.interceptors.response.use(
     return response;
   },
   async (error) => {
+    const originalRequest = error.config;
     const { data, status } = error.response || {};
 
     // Enhanced logging for 401 errors in production
     if (import.meta.env.PROD && status === 401) {
       console.error('❌ 401 Error Details:');
-      console.error('URL:', error.config?.url);
-      console.error('Method:', error.config?.method);
-      console.error('withCredentials:', error.config?.withCredentials);
-      console.error('Headers:', error.config?.headers);
+      console.error('URL:', originalRequest?.url);
+      console.error('Method:', originalRequest?.method);
+      console.error('withCredentials:', originalRequest?.withCredentials);
+      console.error('Headers:', originalRequest?.headers);
       console.error('Cookies at time of error:', document.cookie ? 'Present' : 'None');
+    }
+
+    // Robust 401 recovery in production
+    if (status === 401 && !originalRequest?._retry && import.meta.env.PROD) {
+      originalRequest._retry = true;
+      
+      console.log('🔄 401 detected, attempting recovery...');
+      
+      try {
+        const recovered = await attemptAuthRecovery();
+        
+        if (recovered) {
+          console.log('✅ Retrying original request after recovery');
+          return API(originalRequest);
+        }
+      } catch (recoveryError) {
+        console.error('❌ Recovery failed:', recoveryError);
+      }
     }
 
     // Only redirect on 401 if we're not already on an auth page
