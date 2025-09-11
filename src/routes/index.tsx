@@ -10,6 +10,10 @@ import BaseLayout from "@/layout/base.layout";
 import NotFound from "@/page/errors/NotFound";
 import Landing from "@/page/Landing";
 import InviteUser from "@/page/invite/InviteUser";
+import ProjectManagement from "@/page/ProjectManagement";
+import TimeAnalytics from "@/page/TimeAnalytics";
+import TeamCollaboration from "@/page/TeamCollaboration";
+import Pricing from "@/page/Pricing";
 
 function AppRoutes() {
   return (
@@ -31,6 +35,10 @@ function AppRoutes() {
       {/* Other base routes */}
       <Route element={<BaseLayout />}>
         <Route path="/invite/:token" element={<InviteUser />} />
+        <Route path="/project-management" element={<ProjectManagement />} />
+        <Route path="/time-analytics" element={<TimeAnalytics />} />
+        <Route path="/team-collaboration" element={<TeamCollaboration />} />
+        <Route path="/pricing" element={<Pricing />} />
       </Route>
 
       {/* Protected Routes */}

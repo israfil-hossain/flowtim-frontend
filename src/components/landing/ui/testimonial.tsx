@@ -14,16 +14,18 @@ const Testimonials = () => {
                 </AnimationContainer>
 
                 <AnimationContainer animation="fadeUp" delay={0.3}>
-                    <h2 className="text-2xl font-nohemi md:text-4xl lg:text-5xl font-medium !leading-tight black-gradient ">
-                       Voices of Satisfaction What
+                    <h2 className="text-3xl font-nohemi md:text-4xl lg:text-5xl font-bold !leading-tight">
+                        <span className="text-foreground">Trusted by</span>
                         <br />
-                        Our Clients Say
+                        <span className="primary-gradient">thousands of teams</span>
+                        <br />
+                        <span className="text-foreground">worldwide</span>
                     </h2>
                 </AnimationContainer>
 
                 <AnimationContainer animation="fadeUp" delay={0.4}>
-                    <p className="text-sm md:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto font-uncut">
-                        Elevate your experience with a suite of unparalleled and contemporary features designed to streamline your workflow and enhance productivity.
+                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-uncut leading-relaxed">
+                        See what project managers and teams have to say about their experience with Flowtim.
                     </p>
                 </AnimationContainer>
             </div>
@@ -40,44 +42,50 @@ const Testimonials = () => {
                                 animation="fadeUp"
                                 delay={0.6 + (index * 0.1)}
                             >
-                                <div
-                                    className="flex-shrink-0 w-[400px] rounded-3xl  backdrop-blur-3xl p-8"
-                                >
+                                <div className="flex-shrink-0 w-[400px] bg-background/80 backdrop-blur-sm border border-border rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
                                     <div className="flex flex-col gap-6">
-                                        <AnimationContainer animation="fadeRight" delay={0.7 + (index * 0.1)}>
-                                            <div className="flex items-center gap-4">
-                                                <div className="relative w-12 h-12 rounded-full overflow-hidden">
-                                                    <img
-                                                        src={testimonial.image}
-                                                        alt={testimonial.author}
-                                                        className="object-cover"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-medium">
-                                                        {testimonial.author}
-                                                    </h4>
-                                                    <p className="text-sm text-muted-foreground">
-                                                        {testimonial.role}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </AnimationContainer>
-
-                                        <AnimationContainer animation="fadeUp" delay={0.8 + (index * 0.1)}>
-                                            <p className="text-lg">
-                                                "{testimonial.content}"
-                                            </p>
-                                        </AnimationContainer>
-
-                                        <AnimationContainer animation="fadeUp" delay={0.9 + (index * 0.1)}>
+                                        {/* Rating Stars */}
+                                        <AnimationContainer animation="fadeUp" delay={0.7 + (index * 0.1)}>
                                             <div className="flex gap-1">
                                                 {[...Array(testimonial.rating)].map((_, i) => (
                                                     <Star
                                                         key={i}
-                                                        className="w-5 h-5 fill-primary text-primary"
+                                                        className="w-4 h-4 fill-primary text-primary"
                                                     />
                                                 ))}
+                                            </div>
+                                        </AnimationContainer>
+
+                                        {/* Testimonial Content */}
+                                        <AnimationContainer animation="fadeUp" delay={0.8 + (index * 0.1)}>
+                                            <p className="text-base font-uncut leading-relaxed text-foreground">
+                                                "{testimonial.content}"
+                                            </p>
+                                        </AnimationContainer>
+
+                                        {/* Author Info */}
+                                        <AnimationContainer animation="fadeRight" delay={0.9 + (index * 0.1)}>
+                                            <div className="flex items-center gap-4 pt-4 border-t border-border">
+                                                <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-primary/20">
+                                                    <img
+                                                        src={testimonial.image}
+                                                        alt={testimonial.author}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-medium font-nohemi text-foreground">
+                                                        {testimonial.author}
+                                                    </h4>
+                                                    <p className="text-sm text-muted-foreground font-uncut">
+                                                        {testimonial.role}
+                                                    </p>
+                                                    {testimonial.company && (
+                                                        <p className="text-xs text-primary font-uncut">
+                                                            {testimonial.company}
+                                                        </p>
+                                                    )}
+                                                </div>
                                             </div>
                                         </AnimationContainer>
                                     </div>
