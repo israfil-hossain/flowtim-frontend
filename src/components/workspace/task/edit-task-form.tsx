@@ -34,6 +34,7 @@ import { editTaskMutationFn } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import { TaskType } from "@/types/api.type";
+import { SubtaskList } from "./subtasks/subtask-list";
 
 export default function EditTaskForm({ task, onClose }: { task: TaskType; onClose: () => void }) {
   const queryClient = useQueryClient();
@@ -220,6 +221,15 @@ export default function EditTaskForm({ task, onClose }: { task: TaskType; onClos
             </Button>
           </form>
         </Form>
+        
+        {/* Subtasks Section */}
+        <div className="mt-6 pt-6 border-t">
+          <SubtaskList 
+            taskId={task._id} 
+            taskTitle={task.title}
+            className="border-0"
+          />
+        </div>
       </div>
     </div>
   );

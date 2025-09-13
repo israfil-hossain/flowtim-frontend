@@ -6,6 +6,14 @@ import {
   Users,
   CheckCircle,
   LayoutDashboard,
+  Clock,
+  FileBarChart,
+  FileText,
+  FolderOpen,
+  MessageSquare,
+  Bell,
+  Layout,
+  BarChart3,
 } from "lucide-react";
 import {
   SidebarGroup,
@@ -46,6 +54,46 @@ export function NavMain() {
       title: "Tasks",
       url: `/workspace/${workspaceId}/tasks`,
       icon: CheckCircle,
+    },
+    {
+      title: "Documents",
+      url: `/workspace/${workspaceId}/documents`,
+      icon: FileText,
+    },
+    {
+      title: "Files",
+      url: `/workspace/${workspaceId}/files`,
+      icon: FolderOpen,
+    },
+    {
+      title: "Chat",
+      url: `/workspace/${workspaceId}/chat`,
+      icon: MessageSquare,
+    },
+    {
+      title: "Time Tracking",
+      url: `/workspace/${workspaceId}/time-tracking`,
+      icon: Clock,
+    },
+    {
+      title: "Reports",
+      url: `/workspace/${workspaceId}/reports`,
+      icon: FileBarChart,
+    },
+    {
+      title: "Analytics",
+      url: `/workspace/${workspaceId}/analytics`,
+      icon: BarChart3,
+    },
+    {
+      title: "Notifications",
+      url: `/workspace/${workspaceId}/notifications`,
+      icon: Bell,
+    },
+    {
+      title: "Templates",
+      url: `/workspace/${workspaceId}/project-templates`,
+      icon: Layout,
     },
     {
       title: "Members",

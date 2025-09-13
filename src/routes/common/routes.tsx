@@ -7,6 +7,14 @@ import Members from "@/page/workspace/Members";
 import ProjectDetails from "@/page/workspace/ProjectDetails";
 import Settings from "@/page/workspace/Settings";
 import Tasks from "@/page/workspace/Tasks";
+import TimeTracking from "@/page/workspace/TimeTracking";
+import Reports from "@/page/workspace/Reports";
+import Documents from "@/page/workspace/Documents";
+import Files from "@/page/workspace/Files";
+import Chat from "@/page/workspace/Chat";
+import Notifications from "@/page/workspace/Notifications";
+import ProjectTemplatesPage from "@/page/workspace/ProjectTemplates";
+import Analytics from "@/page/workspace/Analytics";
 import { AUTH_ROUTES, BASE_ROUTE, PROTECTED_ROUTES } from "./routePaths";
 import InviteUser from "@/page/invite/InviteUser";
 import Landing from "@/page/Landing";
@@ -29,4 +37,12 @@ export const protectedRoutePaths = [
   { path: PROTECTED_ROUTES.MEMBERS, element: <Members /> },
   { path: PROTECTED_ROUTES.SETTINGS, element: <Settings /> },
   { path: PROTECTED_ROUTES.PROJECT_DETAILS, element: <ProjectDetails /> },
+  { path: PROTECTED_ROUTES.TIME_TRACKING, element: <TimeTracking /> },
+  { path: PROTECTED_ROUTES.REPORTS, element: <Reports /> },
+  { path: PROTECTED_ROUTES.DOCUMENTS, element: <Documents /> },
+  { path: PROTECTED_ROUTES.FILES, element: <Files /> },
+  { path: PROTECTED_ROUTES.CHAT, element: <Chat /> },
+  { path: PROTECTED_ROUTES.NOTIFICATIONS, element: <Notifications /> },
+  { path: PROTECTED_ROUTES.PROJECT_TEMPLATES, element: <ProjectTemplatesPage /> },
+  { path: PROTECTED_ROUTES.ANALYTICS, element: <Analytics /> },
 ];

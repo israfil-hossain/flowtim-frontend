@@ -1,28 +1,49 @@
-// import { PhoneIcon } from "lucide-react";
+import { lazy, Suspense, memo } from "react";
 import Container from "../global/container";
-import { OrbitingCircles } from "./ui/orbiting-circles";
-import Icons from "../global/icons";
 import { Link } from "react-router-dom";
-import { AnimatedTooltip } from "../ui/animated-tooltip";
-import { People } from "@/constant/people";
-import { Boxes } from "../ui/background-boxes";
 import { Button } from "@/components/ui/button";
 
-function Hero() {
+// Lazy load heavy components
+const OrbitingCircles = lazy(() => import("./ui/orbiting-circles").then(module => ({ default: module.OrbitingCircles })));
+const AnimatedTooltip = lazy(() => import("../ui/animated-tooltip").then(module => ({ default: module.AnimatedTooltip })));
+const Boxes = lazy(() => import("../ui/background-boxes").then(module => ({ default: module.Boxes })));
+
+// Import critical data immediately for better performance
+import Icons from "../global/icons";
+import { People } from "@/constant/people";
+
+// Memoized fallback components
+const TeamsFallback = memo(() => (
+  <div className="flex flex-row items-center justify-center mt-8 w-full">
+    <div className="flex -space-x-2">
+      {[1, 2, 3, 4].map((i) => (
+        <div key={i} className="w-8 h-8 rounded-full bg-primary/20 animate-pulse" />
+      ))}
+    </div>
+    <div className="ml-5 text-left">
+      <p className="font-nohemi text-sm font-medium text-primary">
+        <span className="font-bold text-lg">11k+</span> Teams trust Flowtim
+      </p>
+      <p className="text-xs text-muted-foreground font-uncut">
+        Join thousands of successful projects
+      </p>
+    </div>
+  </div>
+));
+
+const Hero = memo(() => {
   return (
     <section
       id="home"
       className="relative w-full h-fit py-16 overflow-hidden"
     >
-      {/* <img
-        className="absolute top-0 left-0 w-full h-auto bg-white/50"
-        src="/images/noise-background.png"
-        alt="shape"
-        width={1200}
-        height={800}
-      /> */}
-      <Boxes />
-      <Container className="relative lg:block overflow-hidden mb-5">
+      {/* Lazy load background animation */}
+      <Suspense fallback={null}>
+        <Boxes />
+      </Suspense>
+      
+      {/* Critical above-the-fold content - load immediately */}
+      <Container className="relative overflow-hidden mb-5 flex justify-center items-center">
         <div className="inline-flex items-center rounded-full border border-border bg-background/80 backdrop-blur-sm px-4 py-2 shadow-sm">
           <span className="inline-flex items-center justify-center rounded-full bg-primary px-2 py-1 text-[10px] font-medium text-white font-nohemi mr-3">
             NEW
@@ -32,49 +53,56 @@ function Hero() {
           </span>
         </div>
       </Container>
-      <div className="flex flex-row items-center justify-center mt-8 w-full">
-        <AnimatedTooltip items={People} />
-        <div className="ml-5 text-left">
-          <p className="font-nohemi text-sm font-medium text-primary">
-            <span className="font-bold text-lg">11k+</span> Teams trust Flowtim
-          </p>
-          <p className="text-xs text-muted-foreground font-uncut">
-            Join thousands of successful projects
-          </p>
+      
+      {/* Teams section with fallback */}
+      <Suspense fallback={<TeamsFallback />}>
+        <div className="flex flex-row items-center justify-center mt-8 w-full ">
+          <AnimatedTooltip items={People} />
+          <div className="ml-5 text-left z-10">
+            <p className="font-nohemi text-sm font-medium text-primary">
+              <span className="font-bold text-lg">11k+</span> Teams trust Flowtim
+            </p>
+            <p className="text-xs text-muted-foreground font-uncut">
+              Join thousands of successful projects
+            </p>
+          </div>
         </div>
-      </div>
+      </Suspense>
 
       <div className="flex flex-col items-center justify-center gap-y-8 relative">
-        <Container className="flex absolute inset-0 top-1 mb-auto flex-col items-center justify-center w-full min-h-screen -z-10">
-          <OrbitingCircles speed={0.5} radius={300}>
-            <Icons.circle1 className="size-4 text-primary/70" />
-            <Icons.circle2 className="size-1 text-primary/80" />
-          </OrbitingCircles>
-          <OrbitingCircles speed={0.25} radius={400}>
-            <Icons.circle2 className="size-1 text-primary/50" />
-            <Icons.circle1 className="size-4 text-primary/60" />
-            <Icons.circle2 className="size-1 text-primary/90" />
-          </OrbitingCircles>
-          <OrbitingCircles speed={0.1} radius={500}>
-            <Icons.circle2 className="size-1 text-primary/50" />
-            <Icons.circle2 className="size-1 text-primary/90" />
-            <Icons.circle1 className="size-4 text-primary/60" />
-            <Icons.circle2 className="size-1 text-primary/90" />
-          </OrbitingCircles>
-        </Container>
+        {/* Lazy load orbiting circles animation */}
+        <Suspense fallback={null}>
+          <Container className="flex absolute inset-0 top-1 mb-auto flex-col items-center justify-center w-full min-h-screen -z-10">
+            <OrbitingCircles speed={0.5} radius={300}>
+              <Icons.circle1 className="size-4 text-primary/70" />
+              <Icons.circle2 className="size-1 text-primary/80" />
+            </OrbitingCircles>
+            <OrbitingCircles speed={0.25} radius={400}>
+              <Icons.circle2 className="size-1 text-primary/50" />
+              <Icons.circle1 className="size-4 text-primary/60" />
+              <Icons.circle2 className="size-1 text-primary/90" />
+            </OrbitingCircles>
+            <OrbitingCircles speed={0.1} radius={500}>
+              <Icons.circle2 className="size-1 text-primary/50" />
+              <Icons.circle2 className="size-1 text-primary/90" />
+              <Icons.circle1 className="size-4 text-primary/60" />
+              <Icons.circle2 className="size-1 text-primary/90" />
+            </OrbitingCircles>
+          </Container>
+        </Suspense>
         <div className="flex flex-col items-center justify-center text-center gap-y-4 bg-background/0 mt-5">
           <Container delay={0.2}>
             <div className="max-w-4xl flex flex-col gap-6 mx-auto mt-8">
               <h1 className="font-bold text-4xl md:text-6xl lg:text-7xl text-center tracking-tight leading-none">
-                <span className="font-nohemi text-foreground">
+                <span className="font-nohemi italic bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
                   The Complete
                 </span>
                 <br />
-                <span className="font-nohemi primary-gradient inline-block">
+                <span className="font-nohemi primary-gradient inline-block bg-gradient-to-r from-pink-500 to-rose-500 ">
                   Project Management
                 </span>
                 <br />
-                <span className="font-nohemi text-foreground">
+                <span className="font-nohemi ">
                   Solution
                 </span>
               </h1>
@@ -128,12 +156,11 @@ function Hero() {
           </Container>
           <Container delay={0.3} className="relative">
             <div className="relative max-w-6xl mx-auto">
-              {/* Enhanced Glow Effects */}
-              <div className="absolute top-1/4 left-1/2 -z-10 bg-gradient-to-r from-primary/40 to-accent/40 w-3/4 h-1/2 -translate-x-1/2 -translate-y-1/2 blur-[6rem] animate-image-glow"></div>
-              <div className="absolute -top-1/8 left-1/2 -z-20 bg-primary/30 w-1/3 h-1/3 -translate-x-1/2 -translate-y-1/2 blur-[8rem] animate-image-glow"></div>
+              {/* Simplified glow effects - reduced for performance */}
+              <div className="absolute top-1/4 left-1/2 -z-10 bg-gradient-to-r from-primary/20 to-accent/20 w-3/4 h-1/2 -translate-x-1/2 -translate-y-1/2 blur-[4rem]"></div>
               
               {/* Main Container */}
-              <div className="relative rounded-2xl lg:rounded-3xl border border-border/50 bg-background/50 backdrop-blur-sm p-3 lg:p-4 shadow-2xl">
+              <div className="relative rounded-2xl lg:rounded-3xl border border-border/50 bg-background/50 backdrop-blur-sm p-3 lg:p-4 shadow-xl">
                 <div className="rounded-xl lg:rounded-2xl border border-border bg-background overflow-hidden">
                   <img
                     src="/images/dashboard.png"
@@ -141,6 +168,8 @@ function Hero() {
                     width={1620}
                     height={1080}
                     className="w-full h-auto object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 
@@ -171,6 +200,9 @@ function Hero() {
       {/* </div> */}
     </section>
   );
-}
+});
+
+// Set display name for debugging
+Hero.displayName = 'Hero';
 
 export default Hero;

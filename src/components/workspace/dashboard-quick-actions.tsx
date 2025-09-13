@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useUIStore, useTaskStore } from "@/store";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 interface QuickAction {
@@ -28,6 +29,7 @@ interface QuickAction {
 }
 
 const DashboardQuickActions = () => {
+  const navigate = useNavigate();
   const { openModal } = useUIStore();
   const { setViewMode } = useTaskStore();
 
@@ -54,7 +56,7 @@ const DashboardQuickActions = () => {
       id: 'invite-member',
       label: 'Invite Team',
       icon: Users,
-      action: () => openModal('userProfile'), // This would be invite modal
+      action: () => navigate('members'),
       color: 'bg-blue-500 hover:bg-blue-600 text-white',
       description: 'Invite team members',
     },
@@ -62,7 +64,10 @@ const DashboardQuickActions = () => {
       id: 'view-calendar',
       label: 'Calendar',
       icon: Calendar,
-      action: () => setViewMode('calendar'),
+      action: () => {
+        setViewMode('calendar');
+        navigate('tasks');
+      },
       color: 'bg-purple-500 hover:bg-purple-600 text-white',
       description: 'Open calendar view',
     },
@@ -70,7 +75,7 @@ const DashboardQuickActions = () => {
       id: 'time-tracking',
       label: 'Time Track',
       icon: Clock,
-      action: () => console.log('Start time tracking'),
+      action: () => navigate('time-tracking'),
       color: 'bg-orange-500 hover:bg-orange-600 text-white',
       description: 'Start time tracking',
     },
@@ -78,7 +83,7 @@ const DashboardQuickActions = () => {
       id: 'reports',
       label: 'Reports',
       icon: FileText,
-      action: () => console.log('Open reports'),
+      action: () => navigate('reports'),
       color: 'bg-indigo-500 hover:bg-indigo-600 text-white',
       description: 'View reports',
     },

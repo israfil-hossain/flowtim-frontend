@@ -4,7 +4,7 @@ import { DataTable } from "./table/table";
 import { useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { X, List, LayoutGrid, Kanban } from "lucide-react";
+import { X, List, LayoutGrid, Kanban, Calendar } from "lucide-react";
 import { DataTableFacetedFilter } from "./table/table-faceted-filter";
 import { priorities, statuses } from "./table/data";
 import useTaskTableFilter from "@/hooks/use-task-table-filter";
@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/toggle-group";
 import { TaskCardView } from "./views/task-card-view";
 import { TaskCanvasView } from "./views/task-canvas-view";
+import { TaskCalendarView } from "./views/task-calendar-view";
 
 type Filters = ReturnType<typeof useTaskTableFilter>[0];
 type SetFilters = ReturnType<typeof useTaskTableFilter>[1];
@@ -35,7 +36,7 @@ interface DataTableFilterToolbarProps {
   onViewModeChange?: (mode: ViewMode) => void;
 }
 
-type ViewMode = "list" | "card" | "canvas";
+type ViewMode = "list" | "card" | "canvas" | "calendar";
 
 const TaskTable = () => {
   const param = useParams();
@@ -101,6 +102,21 @@ const TaskTable = () => {
           <TaskCanvasView
             tasks={tasks}
             isLoading={isLoading}
+          />
+        );
+      case "calendar":
+        return (
+          <TaskCalendarView
+            tasks={tasks}
+            isLoading={isLoading}
+            onTaskClick={(task) => {
+              // TODO: Open task details modal
+              console.log('Task clicked:', task.title);
+            }}
+            onDateClick={(date) => {
+              // TODO: Create task for this date
+              console.log('Date clicked:', date);
+            }}
           />
         );
       default:
@@ -221,6 +237,9 @@ const DataTableFilterToolbar: FC<DataTableFilterToolbarProps> = ({
             </ToggleGroupItem>
             <ToggleGroupItem value="canvas" aria-label="Canvas View" size="sm">
               <Kanban className="h-3 w-3" />
+            </ToggleGroupItem>
+            <ToggleGroupItem value="calendar" aria-label="Calendar View" size="sm">
+              <Calendar className="h-3 w-3" />
             </ToggleGroupItem>
           </ToggleGroup>
         )}

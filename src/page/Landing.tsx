@@ -2,17 +2,24 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import Hero from "@/components/landing/hero-section";
-import MarqueSection from "@/components/landing/ui/Marque";
-import Testimonials from "@/components/landing/ui/testimonial";
-import CTA from "@/components/landing/ui/cta";
-import PlatformMetrics from "@/components/landing/ui/platform-metrics";
-import FAQ from "@/components/landing/ui/faq";
-import FeatureShowcase from "@/components/landing/ui/feature-showcase";
-import { useState, useEffect, useRef } from "react";
+import PreloadResources from "@/components/landing/preload-resources";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
+import { usePerformanceMonitor } from "@/hooks/use-performance-monitor";
+
+// Lazy load non-critical sections
+const LazyMarqueSection = lazy(() => import("@/components/landing/ui/Marque"));
+const LazyFeatureShowcase = lazy(() => import("@/components/landing/ui/feature-showcase"));
+const LazyPlatformMetrics = lazy(() => import("@/components/landing/ui/platform-metrics"));
+const LazyTestimonials = lazy(() => import("@/components/landing/ui/testimonial"));
+const LazyFAQ = lazy(() => import("@/components/landing/ui/faq"));
+const LazyCTA = lazy(() => import("@/components/landing/ui/cta"));
 
 const Landing = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  // Enable performance monitoring
+  usePerformanceMonitor();
 
   const handleDropdownToggle = (dropdown: string) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
@@ -155,30 +162,40 @@ const Landing = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Preload critical resources */}
+      <PreloadResources />
+      
+      {/* Hero Section - Critical, load immediately */}
       <Hero />
       
-      {/* Trusted Brands */}
-      <MarqueSection />
+      {/* Below-the-fold content - Lazy load for better performance */}
+      <Suspense fallback={<div className="w-full h-32 bg-muted/10 animate-pulse" />}>
+        <LazyMarqueSection />
+      </Suspense>
       
-      {/* Feature Showcase */}
-      <FeatureShowcase />
+      <Suspense fallback={<div className="w-full h-96 bg-muted/10 animate-pulse rounded-lg" />}>
+        <LazyFeatureShowcase />
+      </Suspense>
       
-      {/* Platform Metrics */}
       <section className="w-full">
-        <PlatformMetrics />
+        <Suspense fallback={<div className="w-full h-64 bg-muted/10 animate-pulse rounded-lg" />}>
+          <LazyPlatformMetrics />
+        </Suspense>
       </section>
       
-      {/* Testimonials */}
-      <Testimonials />
+      <Suspense fallback={<div className="w-full h-80 bg-muted/10 animate-pulse rounded-lg" />}>
+        <LazyTestimonials />
+      </Suspense>
 
-      {/* FAQ Section */}
       <section className="w-full">
-        <FAQ />
+        <Suspense fallback={<div className="w-full h-96 bg-muted/10 animate-pulse rounded-lg" />}>
+          <LazyFAQ />
+        </Suspense>
       </section>
       
-      {/* Call to Action */}
-      <CTA />
+      <Suspense fallback={<div className="w-full h-40 bg-muted/10 animate-pulse rounded-lg" />}>
+        <LazyCTA />
+      </Suspense>
 
       {/* Professional Footer */}
       <footer className="bg-muted/30 border-t border-border py-16">

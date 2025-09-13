@@ -143,7 +143,7 @@ export const API_ENDPOINTS = {
 } as const;
 
 // API Response Types
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;
   data?: T;
@@ -167,7 +167,7 @@ export interface ApiError {
   message: string;
   code: string;
   status: number;
-  details?: any;
+  details?: unknown;
 }
 
 // Query Keys for TanStack Query
