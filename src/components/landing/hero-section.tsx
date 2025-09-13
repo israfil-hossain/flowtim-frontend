@@ -93,7 +93,7 @@ const Hero = memo(() => {
         <div className="flex flex-col items-center justify-center text-center gap-y-4 bg-background/0 mt-5">
           <Container delay={0.2}>
             <div className="max-w-4xl flex flex-col gap-6 mx-auto mt-8">
-              <h1 className="font-bold text-4xl md:text-6xl lg:text-7xl text-center tracking-tight leading-none">
+              <h1 className="font-bold text-4xl md:text-6xl lg:text-6xl text-center tracking-tight ">
                 <span className="font-nohemi italic bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
                   The Complete
                 </span>
