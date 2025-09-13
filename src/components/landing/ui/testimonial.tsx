@@ -80,11 +80,6 @@ const Testimonials = () => {
                                                     <p className="text-sm text-muted-foreground font-uncut">
                                                         {testimonial.role}
                                                     </p>
-                                                    {testimonial.company && (
-                                                        <p className="text-xs text-primary font-uncut">
-                                                            {testimonial.company}
-                                                        </p>
-                                                    )}
                                                 </div>
                                             </div>
                                         </AnimationContainer>

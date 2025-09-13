@@ -21,12 +21,14 @@ API.interceptors.request.use((config) => {
     console.log('⚙️ withCredentials:', config.withCredentials);
     
     // Log specific cookies for debugging
-    const cookies = document.cookie.split(';').reduce((acc, cookie) => {
-      const [name, value] = cookie.trim().split('=');
-      acc[name] = value;
-      return acc;
-    }, {} as Record<string, string>);
-    console.log('🍪 Available cookies:', Object.keys(cookies));
+    if (document.cookie) {
+      const cookies = document.cookie.split(';').reduce((acc, cookie) => {
+        const [name, value] = cookie.trim().split('=');
+        acc[name] = value;
+        return acc;
+      }, {} as Record<string, string>);
+      console.log('🍪 Available cookies:', Object.keys(cookies));
+    }
   }
   
   return config;
