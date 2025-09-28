@@ -47,7 +47,7 @@ export const BoxesCore = ({ className, ...rest }: { className?: string }) => {
                 transition: { duration: 2 },
               }}
               key={`col` + j}
-              className="relative h-8 w-16 border-t border-r border-slate-100"
+              className="relative h-8 w-16 border-t border-r border-slate-50"
             >
               {j % 2 === 0 && i % 2 === 0 ? (
                 <svg

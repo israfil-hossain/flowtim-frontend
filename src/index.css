@@ -163,7 +163,7 @@ em-emoji-picker {
 /* Gradients */
 @layer utilities {
   .primary-gradient {
-    @apply bg-gradient-to-r from-[#1A2A80] to-[#7a4ad2e8] bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-[#667eea] via-[#764ba2] to-[#f093fb] bg-clip-text text-transparent;
   }
   .accent-gradient {
     @apply bg-gradient-to-r from-[#3f4568] to-[#B2B0E8] bg-clip-text text-transparent;

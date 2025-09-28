@@ -10,6 +10,17 @@ const GoogleOAuthSuccess = () => {
     // After successful OAuth, fetch user data and navigate to workspace
     const handleSuccessfulAuth = async () => {
       try {
+        // Check for token in URL parameters or cookies first
+        const urlParams = new URLSearchParams(window.location.search);
+        const tokenFromUrl = urlParams.get('token');
+        
+        if (tokenFromUrl) {
+          localStorage.setItem('auth_token', tokenFromUrl);
+        } else {
+          // Check if token exists in cookies (backend might set httpOnly cookie)
+          console.log('🔍 Checking for existing token in localStorage:', !!localStorage.getItem('auth_token'));
+        }
+        
         // Fetch user data now that authentication is complete
         const userResponse = await getCurrentUserQueryFn();
         

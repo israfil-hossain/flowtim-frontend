@@ -5,11 +5,18 @@ import { DataTableColumnHeader } from "./table-column-header";
 import { DataTableRowActions } from "./table-row-actions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   TaskPriorityEnum,
   TaskPriorityEnumType,
-  TaskStatusEnum,
-  TaskStatusEnumType,
 } from "@/constant";
 import {
   formatStatusToEnum,
@@ -20,7 +27,13 @@ import { priorities, statuses } from "./data";
 import { TaskType } from "@/types/api.type";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export const getColumns = (projectId?: string): ColumnDef<TaskType>[] => {
+export const getColumns = (
+  projectId?: string,
+  onTaskExpand?: (taskId: string) => void,
+  expandedTasks?: Set<string>,
+  onTaskClick?: (task: TaskType) => void,
+  onStatusChange?: (taskId: string, status: string) => void
+): ColumnDef<TaskType>[] => {
   const columns: ColumnDef<TaskType>[] = [
     {
       id: "_id",
@@ -47,19 +60,58 @@ export const getColumns = (projectId?: string): ColumnDef<TaskType>[] => {
       enableHiding: false,
     },
     {
+      id: "expand",
+      header: () => null,
+      cell: ({ row }) => {
+        const task = row.original;
+        const isExpanded = expandedTasks?.has(task._id) || false;
+        
+        return (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-6 w-6 p-0"
+            onClick={() => onTaskExpand?.(task._id)}
+          >
+            {isExpanded ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </Button>
+        );
+      },
+      enableSorting: false,
+      enableHiding: false,
+      size: 40,
+    },
+    {
       accessorKey: "title",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Title" />
       ),
       cell: ({ row }) => {
+        const task = row.original;
         return (
           <div className="flex flex-wrap space-x-2">
-            <Badge variant="outline" className="capitalize shrink-0 h-[25px]">
-              {row.original.taskCode}
-            </Badge>
-            <span className="block lg:max-w-[220px] max-w-[200px] font-medium">
-              {row.original.title}
-            </span>
+            <Button
+              variant="ghost"
+              className="h-auto p-0 hover:bg-transparent"
+              onClick={() => onTaskClick?.(task)}
+            >
+              <Badge variant="outline" className="capitalize shrink-0 h-[25px] hover:bg-muted cursor-pointer">
+                {task.taskCode}
+              </Badge>
+            </Button>
+            <Button
+              variant="ghost"
+              className="h-auto p-0 hover:bg-transparent text-left justify-start"
+              onClick={() => onTaskClick?.(task)}
+            >
+              <span className="block lg:max-w-[220px] max-w-[200px] font-medium hover:text-primary cursor-pointer">
+                {task.title}
+              </span>
+            </Button>
           </div>
         );
       },
@@ -138,32 +190,43 @@ export const getColumns = (projectId?: string): ColumnDef<TaskType>[] => {
         <DataTableColumnHeader column={column} title="Status" />
       ),
       cell: ({ row }) => {
-        const status = statuses.find(
-          (status) => status.value === row.getValue("status")
+        const task = row.original;
+        const currentStatus = statuses.find(
+          (status) => status.value === task.status
         );
 
-        if (!status) {
-          return null;
-        }
-
-        const statusKey = formatStatusToEnum(
-          status.value
-        ) as TaskStatusEnumType;
-        const Icon = status.icon;
-
-        if (!Icon) {
-          return null;
-        }
-
         return (
-          <div className="flex lg:w-[120px] items-center">
-            <Badge
-              variant={TaskStatusEnum[statusKey]}
-              className="flex w-auto p-1 px-2 gap-1 font-medium shadow-sm uppercase border-0"
+          <div className="lg:w-[120px]">
+            <Select
+              value={task.status}
+              onValueChange={(value) => onStatusChange?.(task._id, value)}
             >
-              <Icon className="h-4 w-4 rounded-full text-inherit" />
-              <span>{status.label}</span>
-            </Badge>
+              <SelectTrigger className="h-8 w-full border-none p-0 bg-transparent hover:bg-muted focus:ring-0 focus:ring-offset-0">
+                <SelectValue>
+                  {currentStatus && (
+                    <div className="flex items-center gap-1">
+                      {currentStatus.icon && (
+                        <currentStatus.icon className="h-3 w-3" />
+                      )}
+                      <span className="text-xs">{currentStatus.label}</span>
+                    </div>
+                  )}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                {statuses.map((status) => {
+                  const StatusIcon = status.icon;
+                  return (
+                    <SelectItem key={status.value} value={status.value}>
+                      <div className="flex items-center gap-2">
+                        {StatusIcon && <StatusIcon className="h-3 w-3" />}
+                        <span>{status.label}</span>
+                      </div>
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
           </div>
         );
       },
