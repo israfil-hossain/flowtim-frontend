@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TimeTracker } from "@/components/workspace/time-tracking/time-tracker";
 import { Clock, Download, Filter, Calendar as CalendarIcon, BarChart3, TrendingUp } from "lucide-react";
-import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from "date-fns";
+import { format, startOfWeek, endOfWeek } from "date-fns";
 import { getAvatarColor, getAvatarFallbackText } from "@/lib/helper";
 
 interface TimeEntry {

@@ -58,7 +58,7 @@ const initialState: AuthState = {
 export const useAuthStore = create<AuthStore>()(
   devtools(
     persist(
-      immer((set, get) => ({
+      immer((set) => ({
         ...initialState,
         
         // State setters

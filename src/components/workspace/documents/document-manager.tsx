@@ -12,13 +12,11 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { 
   FileText, 
   Plus, 
   Search, 
-  Download, 
+ 
   Share2, 
   Edit, 
   Trash2, 
@@ -62,19 +60,6 @@ interface Document {
   workspaceId: string;
 }
 
-interface DocumentVersion {
-  id: string;
-  documentId: string;
-  version: number;
-  title: string;
-  content: string;
-  author: {
-    name: string;
-    avatar?: string;
-  };
-  createdAt: Date;
-  changeLog: string;
-}
 
 export const DocumentManager: FC = () => {
   const [searchQuery, setSearchQuery] = useState("");

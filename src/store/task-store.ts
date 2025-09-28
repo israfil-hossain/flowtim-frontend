@@ -353,7 +353,7 @@ export const useTaskStore = create<TaskStore>()(
         const state = get();
         const now = new Date();
         return state.tasks.filter(t => 
-          new Date(t.dueDate) < now && t.status !== 'COMPLETED'
+          new Date(t.dueDate) < now && t.status !== 'DONE'
         );
       },
       

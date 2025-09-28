@@ -24,6 +24,8 @@ export const PROTECTED_ROUTES = {
   NOTIFICATIONS: "/workspace/:workspaceId/notifications",
   PROJECT_TEMPLATES: "/workspace/:workspaceId/project-templates",
   ANALYTICS: "/workspace/:workspaceId/analytics",
+  PROFILE: "/workspace/:workspaceId/profile",
+  APPEARANCE: "/workspace/:workspaceId/appearance",
 };
 
 export const BASE_ROUTE = {

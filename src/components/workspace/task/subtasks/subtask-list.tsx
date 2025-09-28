@@ -19,7 +19,6 @@ import {
   ChevronDown, 
   ChevronRight,
   CheckCircle2,
-  Circle,
   Edit,
   Trash2,
   Flag

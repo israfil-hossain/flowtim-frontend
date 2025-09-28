@@ -4,7 +4,7 @@
  */
 
 import { FC, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { 
   Bell, 
   Search, 
-  Filter, 
+ 
   MoreHorizontal,
   Check,
   CheckCheck,
@@ -20,14 +20,12 @@ import {
   Settings,
   User,
   MessageSquare,
-  Calendar,
   FileText,
   AlertTriangle,
-  CheckCircle,
   Clock,
   Users
 } from "lucide-react";
-import { format, formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { getAvatarColor, getAvatarFallbackText } from "@/lib/helper";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -180,7 +178,7 @@ export const NotificationCenter: FC = () => {
     }
   };
 
-  const getNotificationColor = (type: Notification['type'], priority: Notification['priority']) => {
+  const getNotificationColor = (_type: Notification['type'], priority: Notification['priority']) => {
     if (priority === 'high') return 'border-l-red-500 bg-red-50';
     if (priority === 'medium') return 'border-l-yellow-500 bg-yellow-50';
     return 'border-l-blue-500 bg-blue-50';

@@ -5,15 +5,14 @@ import {
   CheckCircle2,
   Kanban,
   BarChart3,
-  Users,
-  Clock,
   ArrowRight,
-  Star,
   Play
 } from "lucide-react";
 import AnimationContainer from "@/components/global/animation-container";
 import Wrapper from "@/components/global/wrapper";
 import SectionBadge from "@/components/ui/section-badge";
+import LandingHeader from "@/components/navigation/landing-header";
+import AnimatedSectionBadge from "@/components/ui/animated-section-badge";
 
 const FEATURES = [
   {
@@ -80,38 +79,14 @@ const BENEFITS = [
 const ProjectManagement = () => {
   return (
     <div className="min-h-screen">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-        <div className="container mx-auto px-6 py-4">
-          <nav className="flex items-center justify-between">
-            <Link to="/" className="flex items-center">
-              <img
-                src="/images/long-logo.png"
-                alt="Flowtim Logo"
-                width={150}
-                height={50}
-                className="h-8 w-auto"
-              />
-            </Link>
-            <div className="flex items-center gap-4">
-              <Link to="/">
-                <Button variant="ghost">Back to Home</Button>
-              </Link>
-              <Link to="/sign-up">
-                <Button className="bg-primary hover:bg-primary/90">Get Started</Button>
-              </Link>
-            </div>
-          </nav>
-        </div>
-      </header>
+      {/* Reusable Header */}
+      <LandingHeader />
 
       {/* Hero Section */}
       <section className="py-20 lg:py-32 bg-gradient-to-b from-background to-muted/20">
         <Wrapper>
           <div className="text-center max-w-4xl mx-auto">
-            <AnimationContainer animation="fadeUp" delay={0.1}>
-              <SectionBadge title="Project Management" />
-            </AnimationContainer>
+            <AnimatedSectionBadge title="Project Management" />
 
             <AnimationContainer animation="fadeUp" delay={0.2}>
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-nohemi mt-6 mb-6">

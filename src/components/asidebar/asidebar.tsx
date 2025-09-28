@@ -29,14 +29,21 @@ const Asidebar = () => {
       <Sidebar collapsible="icon">
         <SidebarHeader className="!py-0 dark:bg-background">
           <div className="flex h-[50px] items-center justify-start w-full px-1">
-            <Logo url={`/workspace/${workspaceId}`} />
-            {open && (
+            {open ? (
               <Link
                 to={`/workspace/${workspaceId}`}
-                className="hidden md:flex ml-2 items-center gap-2 self-center font-medium"
+                className="flex items-center justify-start w-full"
               >
-                Flowtim.
+                <img
+                  src="/images/long-logo.png"
+                  alt="Flowtim Logo"
+                  width={120}
+                  height={30}
+                  className="h-8 w-auto"
+                />
               </Link>
+            ) : (
+              <Logo url={`/workspace/${workspaceId}`} />
             )}
           </div>
         </SidebarHeader>

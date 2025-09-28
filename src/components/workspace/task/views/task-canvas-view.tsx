@@ -18,7 +18,7 @@ import {
 import { priorities, statuses } from "../table/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Edit, Trash2, Plus } from "lucide-react";
+import { MoreHorizontal, Edit, Trash2, Plus, Copy } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -75,6 +75,11 @@ const TaskCard: FC<TaskCardProps> = ({ task }) => {
     setIsEditOpen(true);
   };
 
+  const handleDuplicate = () => {
+    // TODO: Implement task duplication
+    console.log('Duplicate task:', task._id);
+  };
+
   const handleDelete = () => {
     setIsDeleteOpen(true);
   };
@@ -107,6 +112,10 @@ const TaskCard: FC<TaskCardProps> = ({ task }) => {
               <DropdownMenuItem onClick={handleEdit}>
                 <Edit className="mr-2 h-3 w-3" />
                 Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDuplicate}>
+                <Copy className="mr-2 h-3 w-3" />
+                Duplicate
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={handleDelete}

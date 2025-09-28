@@ -9,13 +9,12 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "./ui/separator";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useWorkspaceId from "@/hooks/use-workspace-id";
-import { EllipsisIcon, Loader, LogOut, Plus, FileText, FolderPlus, Bell, MessageSquare } from "lucide-react";
+import { Loader, LogOut, Plus, FileText, MessageSquare, User, Settings, Palette, Users, Calendar, Clock, Target } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -24,18 +23,25 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import LogoutDialog from "./asidebar/logout-dialog";
 import { useAuthContext } from "@/context/auth-provider";
+import { useUIStore, useTaskStore } from "@/store";
+import NotificationDropdown from "./workspace/notifications/notification-dropdown";
 
 const Header = () => {
   const { isLoading, user } = useAuthContext();
   const location = useLocation();
+  const navigate = useNavigate();
   const workspaceId = useWorkspaceId();
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  const { openModal } = useUIStore();
+  const { setViewMode } = useTaskStore();
 
   const pathname = location.pathname;
 
   const getPageLabel = (pathname: string) => {
     if (pathname.includes("/project/")) return "Project";
     if (pathname.includes("/settings")) return "Settings";
+    if (pathname.includes("/appearance")) return "Appearance";
+    if (pathname.includes("/profile")) return "Profile";
     if (pathname.includes("/tasks")) return "Tasks";
     if (pathname.includes("/members")) return "Members";
     return null; // Default label
@@ -78,26 +84,60 @@ const Header = () => {
         
         {/* Right side - Quick Actions, Notifications, Chat, and User Menu */}
         <div className="flex items-center gap-2 px-3">
-          {/* Quick Action Button */}
+          {/* Quick Actions Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm" className="h-8 gap-2">
                 <Plus className="h-4 w-4" />
-                <span className="hidden sm:inline">Quick Action</span>
+                <span className="hidden sm:inline">Quick Actions</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem asChild>
-                <Link to={`/workspace/${workspaceId}/documents/new`} className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  New Document
-                </Link>
+            <DropdownMenuContent align="end" className="w-52">
+              <DropdownMenuItem onClick={() => openModal('createProject')} className="flex items-center gap-2">
+                <Plus className="h-4 w-4 text-primary" />
+                <div className="flex flex-col">
+                  <span>New Project</span>
+                  <span className="text-xs text-muted-foreground">Start a new project</span>
+                </div>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to={`/workspace/${workspaceId}/projects/new`} className="flex items-center gap-2">
-                  <FolderPlus className="h-4 w-4" />
-                  New Project
-                </Link>
+              <DropdownMenuItem onClick={() => openModal('createTask')} className="flex items-center gap-2">
+                <Target className="h-4 w-4 text-green-500" />
+                <div className="flex flex-col">
+                  <span>Add Task</span>
+                  <span className="text-xs text-muted-foreground">Create a new task</span>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => navigate(`/workspace/${workspaceId}/members`)} className="flex items-center gap-2">
+                <Users className="h-4 w-4 text-blue-500" />
+                <div className="flex flex-col">
+                  <span>Invite Team</span>
+                  <span className="text-xs text-muted-foreground">Invite team members</span>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {
+                setViewMode('calendar');
+                navigate(`/workspace/${workspaceId}/tasks`);
+              }} className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-purple-500" />
+                <div className="flex flex-col">
+                  <span>Calendar</span>
+                  <span className="text-xs text-muted-foreground">Open calendar view</span>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate(`/workspace/${workspaceId}/time-tracking`)} className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-orange-500" />
+                <div className="flex flex-col">
+                  <span>Time Track</span>
+                  <span className="text-xs text-muted-foreground">Start time tracking</span>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate(`/workspace/${workspaceId}/reports`)} className="flex items-center gap-2">
+                <FileText className="h-4 w-4 text-indigo-500" />
+                <div className="flex flex-col">
+                  <span>Reports</span>
+                  <span className="text-xs text-muted-foreground">View reports</span>
+                </div>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -115,20 +155,8 @@ const Header = () => {
             </Link>
           </Button>
 
-          {/* Notifications Button */}
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="h-8 w-8 p-0 relative"
-            asChild
-          >
-            <Link to={`/workspace/${workspaceId}/notifications`}>
-              <Bell className="h-4 w-4" />
-              {/* Optional notification badge - can be added later */}
-              {/* <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full"></span> */}
-              <span className="sr-only">Notifications</span>
-            </Link>
-          </Button>
+          {/* Notifications Dropdown */}
+          <NotificationDropdown />
 
           {/* User Menu */}
           {isLoading ? (
@@ -157,6 +185,25 @@ const Header = () => {
                     )}
                   </div>
                 </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to={`/workspace/${workspaceId}/profile`} className="flex items-center">
+                    <User className="mr-2 h-4 w-4" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to={`/workspace/${workspaceId}/appearance`} className="flex items-center">
+                    <Palette className="mr-2 h-4 w-4" />
+                    Appearance
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to={`/workspace/${workspaceId}/settings`} className="flex items-center">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => setIsLogoutOpen(true)}>
                   <LogOut className="mr-2 h-4 w-4" />

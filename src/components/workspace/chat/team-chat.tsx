@@ -4,16 +4,13 @@
  */
 
 import { FC, useState, useRef, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { 
-  MessageCircle, 
   Send, 
   Smile, 
   Paperclip, 
@@ -30,9 +27,7 @@ import {
   Reply,
   Edit,
   Trash2,
-  Heart,
-  ThumbsUp,
-  Laugh
+  ThumbsUp
 } from "lucide-react";
 import { format, isToday, isYesterday } from "date-fns";
 import { getAvatarColor, getAvatarFallbackText } from "@/lib/helper";
@@ -98,7 +93,6 @@ export const TeamChat: FC = () => {
   const [messageText, setMessageText] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
-  const [editingMessage, setEditingMessage] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -529,7 +523,7 @@ export const TeamChat: FC = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => setEditingMessage(message.id)}>
+                        <DropdownMenuItem>
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
                         </DropdownMenuItem>

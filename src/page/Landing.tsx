@@ -1,166 +1,28 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
 import Hero from "@/components/landing/hero-section";
 import PreloadResources from "@/components/landing/preload-resources";
-import { useState, useEffect, useRef, lazy, Suspense } from "react";
+import LandingHeader from "@/components/navigation/landing-header";
+import { lazy, Suspense } from "react";
 import { usePerformanceMonitor } from "@/hooks/use-performance-monitor";
 
 // Lazy load non-critical sections
 const LazyMarqueSection = lazy(() => import("@/components/landing/ui/Marque"));
 const LazyFeatureShowcase = lazy(() => import("@/components/landing/ui/feature-showcase"));
+const LazyFileManagementShowcase = lazy(() => import("@/components/landing/ui/file-management-showcase"));
 const LazyPlatformMetrics = lazy(() => import("@/components/landing/ui/platform-metrics"));
 const LazyTestimonials = lazy(() => import("@/components/landing/ui/testimonial"));
 const LazyFAQ = lazy(() => import("@/components/landing/ui/faq"));
 const LazyCTA = lazy(() => import("@/components/landing/ui/cta"));
 
 const Landing = () => {
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  
   // Enable performance monitoring
   usePerformanceMonitor();
 
-  const handleDropdownToggle = (dropdown: string) => {
-    setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
-  };
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setActiveDropdown(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
   return (
     <div className="min-h-screen ">
-      {/* Professional Header */}
-      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-        <div className="container mx-auto px-6 py-4">
-          <nav className="flex items-center justify-between">
-            <Link to="/" className="flex items-center">
-              <img
-                src="/images/long-logo.png"
-                alt="Flowtim Logo"
-                width={150}
-                height={50}
-                className="h-8 w-auto"
-              />
-            </Link>
-            
-            {/* Navigation Menu */}
-            <div ref={dropdownRef} className="hidden md:flex items-center space-x-8">
-              {/* Project Management Dropdown */}
-              <div className="relative">
-                <button
-                  onClick={() => handleDropdownToggle('projects')}
-                  className="flex items-center space-x-1 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <span>Project Management</span>
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-                {activeDropdown === 'projects' && (
-                  <div className="absolute top-full left-0 mt-2 w-64 bg-background border border-border rounded-lg shadow-lg p-4">
-                    <div className="space-y-3">
-                      <Link to="/project-management" className="block px-3 py-2 text-sm hover:bg-muted rounded-md">
-                        <div className="font-medium">Kanban Boards</div>
-                        <div className="text-xs text-muted-foreground">Visual task management</div>
-                      </Link>
-                      <Link to="/project-management" className="block px-3 py-2 text-sm hover:bg-muted rounded-md">
-                        <div className="font-medium">Project Planning</div>
-                        <div className="text-xs text-muted-foreground">Timeline & milestones</div>
-                      </Link>
-                      <Link to="/project-management" className="block px-3 py-2 text-sm hover:bg-muted rounded-md">
-                        <div className="font-medium">Task Management</div>
-                        <div className="text-xs text-muted-foreground">Assign & track progress</div>
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Time & Analytics Dropdown */}
-              <div className="relative">
-                <button
-                  onClick={() => handleDropdownToggle('analytics')}
-                  className="flex items-center space-x-1 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <span>Time & Analytics</span>
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-                {activeDropdown === 'analytics' && (
-                  <div className="absolute top-full left-0 mt-2 w-64 bg-background border border-border rounded-lg shadow-lg p-4">
-                    <div className="space-y-3">
-                      <Link to="/time-analytics" className="block px-3 py-2 text-sm hover:bg-muted rounded-md">
-                        <div className="font-medium">Time Tracking</div>
-                        <div className="text-xs text-muted-foreground">Monitor work hours</div>
-                      </Link>
-                      <Link to="/time-analytics" className="block px-3 py-2 text-sm hover:bg-muted rounded-md">
-                        <div className="font-medium">Dashboard Analytics</div>
-                        <div className="text-xs text-muted-foreground">Real-time insights</div>
-                      </Link>
-                      <Link to="/time-analytics" className="block px-3 py-2 text-sm hover:bg-muted rounded-md">
-                        <div className="font-medium">Performance Reports</div>
-                        <div className="text-xs text-muted-foreground">Team productivity metrics</div>
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Team & Collaboration Dropdown */}
-              <div className="relative">
-                <button
-                  onClick={() => handleDropdownToggle('team')}
-                  className="flex items-center space-x-1 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <span>Team & Collaboration</span>
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-                {activeDropdown === 'team' && (
-                  <div className="absolute top-full left-0 mt-2 w-64 bg-background border border-border rounded-lg shadow-lg p-4">
-                    <div className="space-y-3">
-                      <Link to="/team-collaboration" className="block px-3 py-2 text-sm hover:bg-muted rounded-md">
-                        <div className="font-medium">Team Management</div>
-                        <div className="text-xs text-muted-foreground">Resource allocation</div>
-                      </Link>
-                      <Link to="/team-collaboration" className="block px-3 py-2 text-sm hover:bg-muted rounded-md">
-                        <div className="font-medium">Real-time Chat</div>
-                        <div className="text-xs text-muted-foreground">Instant communication</div>
-                      </Link>
-                      <Link to="/team-collaboration" className="block px-3 py-2 text-sm hover:bg-muted rounded-md">
-                        <div className="font-medium">File Sharing</div>
-                        <div className="text-xs text-muted-foreground">Document collaboration</div>
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <Link to="/pricing" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-                Pricing
-              </Link>
-            </div>
-
-            {/* Auth Buttons */}
-            <div className="flex items-center gap-4">
-              <Link to="/sign-in">
-                <Button variant="ghost" className="hidden md:flex">Sign In</Button>
-              </Link>
-              <Link to="/sign-up">
-                <Button className="bg-primary hover:bg-primary/90">Try for Free</Button>
-              </Link>
-            </div>
-          </nav>
-        </div>
-      </header>
+      {/* Reusable Header */}
+      <LandingHeader />
 
       {/* Preload critical resources */}
       <PreloadResources />
@@ -175,6 +37,10 @@ const Landing = () => {
       
       <Suspense fallback={<div className="w-full h-96 bg-muted/10 animate-pulse rounded-lg" />}>
         <LazyFeatureShowcase />
+      </Suspense>
+
+      <Suspense fallback={<div className="w-full h-96 bg-muted/10 animate-pulse rounded-lg" />}>
+        <LazyFileManagementShowcase />
       </Suspense>
       
       <section className="w-full">
@@ -206,9 +72,9 @@ const Landing = () => {
               <img
                 src="/images/long-logo.png"
                 alt="Flowtim Logo"
-                width={120}
-                height={40}
-                className="h-6 w-auto"
+                width={150}
+                height={50}
+                className="h-8 w-auto"
               />
               <p className="text-sm text-muted-foreground font-uncut">
                 Empowering teams with intelligent project management solutions.

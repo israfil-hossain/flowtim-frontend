@@ -264,12 +264,12 @@ export function NavMain() {
             subItems: [
               {
                 title: "Profile",
-                url: `/workspace/${workspaceId}/settings/profile`,
+                url: `/workspace/${workspaceId}/profile`,
                 icon: User,
               },
               {
                 title: "Appearance",
-                url: `/workspace/${workspaceId}/settings/appearance`,
+                url: `/workspace/${workspaceId}/appearance`,
                 icon: Palette,
               },
               {

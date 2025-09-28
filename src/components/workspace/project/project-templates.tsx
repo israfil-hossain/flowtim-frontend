@@ -8,31 +8,26 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { 
   Plus, 
   Search, 
-  Filter, 
+ 
   Code, 
   Palette, 
   Megaphone, 
-  Users, 
+ 
   Briefcase,
   Rocket,
   Building,
-  Globe,
   Smartphone,
   BookOpen,
-  ShoppingCart,
   Heart,
   Star,
   Clock,
   CheckCircle,
   Copy,
-  Edit,
-  Trash2
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -218,7 +213,6 @@ export const ProjectTemplates: FC = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<ProjectTemplate | null>(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
 
@@ -264,7 +258,7 @@ export const ProjectTemplates: FC = () => {
           </p>
         </div>
         
-        <Button onClick={() => setIsCreateDialogOpen(true)}>
+        <Button onClick={() => console.log('Create template')}>
           <Plus className="h-4 w-4 mr-2" />
           Create Template
         </Button>

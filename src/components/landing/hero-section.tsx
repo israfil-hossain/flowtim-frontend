@@ -49,7 +49,7 @@ const Hero = memo(() => {
             NEW
           </span>
           <span className="text-sm font-medium text-primary font-nohemi">
-            Introducing Flowtim 2.0 - Enhanced Project Management
+            Introducing Flowtim - Enhanced Project Management
           </span>
         </div>
       </Container>
@@ -94,7 +94,7 @@ const Hero = memo(() => {
           <Container delay={0.2}>
             <div className="max-w-4xl flex flex-col gap-6 mx-auto mt-8">
               <h1 className="font-bold text-4xl md:text-6xl lg:text-6xl text-center tracking-tight ">
-                <span className="font-nohemi italic bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
+                <span className="font-nohemi italic bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent pr-4">
                   The Complete
                 </span>
                 <br />

@@ -15,20 +15,17 @@ import {
   Clock, 
   CheckCircle, 
   Users, 
-  AlertTriangle,
   Calendar,
   Target,
   BarChart3,
   PieChart,
   LineChart,
   Download,
-  Filter,
   RefreshCw,
   Zap,
   Award,
   Activity
 } from "lucide-react";
-import { format, subDays, subWeeks, subMonths } from "date-fns";
 
 interface AnalyticsData {
   productivity: {

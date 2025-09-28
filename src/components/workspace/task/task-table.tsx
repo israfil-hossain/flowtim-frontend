@@ -20,9 +20,17 @@ import {
   ToggleGroup, 
   ToggleGroupItem 
 } from "@/components/ui/toggle-group";
+import { 
+  Tooltip, 
+  TooltipContent, 
+  TooltipProvider, 
+  TooltipTrigger 
+} from "@/components/ui/tooltip";
 import { TaskCardView } from "./views/task-card-view";
 import { TaskCanvasView } from "./views/task-canvas-view";
 import { TaskCalendarView } from "./views/task-calendar-view";
+import { SubtaskList } from "./subtasks/subtask-list";
+import { TaskDetailSidebar } from "./task-detail-sidebar";
 
 type Filters = ReturnType<typeof useTaskTableFilter>[0];
 type SetFilters = ReturnType<typeof useTaskTableFilter>[1];
@@ -45,10 +53,41 @@ const TaskTable = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set());
+  const [selectedTask, setSelectedTask] = useState<TaskType | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [filters, setFilters] = useTaskTableFilter();
   const workspaceId = useWorkspaceId();
-  const columns = getColumns(projectId);
+  
+  const handleTaskExpand = (taskId: string) => {
+    setExpandedTasks(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(taskId)) {
+        newSet.delete(taskId);
+      } else {
+        newSet.add(taskId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleTaskClick = (task: TaskType) => {
+    setSelectedTask(task);
+    setIsSidebarOpen(true);
+  };
+
+  const handleCloseSidebar = () => {
+    setIsSidebarOpen(false);
+    setSelectedTask(null);
+  };
+
+  const handleStatusChange = (taskId: string, status: string) => {
+    // TODO: Implement task status update
+    console.log('Update task status:', taskId, status);
+  };
+  
+  const columns = getColumns(projectId, handleTaskExpand, expandedTasks, handleTaskClick, handleStatusChange);
 
   const { data, isLoading } = useQuery({
     queryKey: [
@@ -83,6 +122,18 @@ const TaskTable = () => {
   // Handle page size changes
   const handlePageSizeChange = (size: number) => {
     setPageSize(size);
+  };
+
+  const renderExpandedRow = (task: TaskType) => {
+    return (
+      <div className="p-4 bg-muted/20">
+        <SubtaskList
+          taskId={task._id}
+          taskTitle={task.title}
+          className="border-none shadow-none"
+        />
+      </div>
+    );
   };
 
   const renderView = () => {
@@ -132,28 +183,47 @@ const TaskTable = () => {
               pageNumber,
               pageSize,
             }}
+            expandedTasks={expandedTasks}
+            renderExpandedRow={renderExpandedRow}
           />
         );
     }
   };
 
   return (
-    <div className="w-full relative">
-      {/* Filters are always shown first */}
-      <div className="mb-4">
-        <DataTableFilterToolbar
-          isLoading={isLoading}
-          projectId={projectId}
-          filters={filters}
-          setFilters={setFilters}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
+    <TooltipProvider>
+      <div className="w-full relative">
+        {/* Filters are always shown first */}
+        <div className="mb-4">
+          <DataTableFilterToolbar
+            isLoading={isLoading}
+            projectId={projectId}
+            filters={filters}
+            setFilters={setFilters}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+          />
+        </div>
+        
+        {/* View component rendered below filters */}
+        {renderView()}
+        
+        {/* Task Detail Sidebar */}
+        <TaskDetailSidebar
+          task={selectedTask}
+          isOpen={isSidebarOpen}
+          onClose={handleCloseSidebar}
+          onUpdate={(taskId, updates) => {
+            // TODO: Implement task update
+            console.log('Update task:', taskId, updates);
+          }}
+          onDelete={(taskId) => {
+            // TODO: Implement task deletion
+            console.log('Delete task:', taskId);
+          }}
         />
       </div>
-      
-      {/* View component rendered below filters */}
-      {renderView()}
-    </div>
+    </TooltipProvider>
   );
 };
 
@@ -229,18 +299,46 @@ const DataTableFilterToolbar: FC<DataTableFilterToolbarProps> = ({
             }}
             className="h-9"
           >
-            <ToggleGroupItem value="list" aria-label="List View" size="sm">
-              <List className="h-3 w-3" />
-            </ToggleGroupItem>
-            <ToggleGroupItem value="card" aria-label="Card View" size="sm">
-              <LayoutGrid className="h-3 w-3" />
-            </ToggleGroupItem>
-            <ToggleGroupItem value="canvas" aria-label="Canvas View" size="sm">
-              <Kanban className="h-3 w-3" />
-            </ToggleGroupItem>
-            <ToggleGroupItem value="calendar" aria-label="Calendar View" size="sm">
-              <Calendar className="h-3 w-3" />
-            </ToggleGroupItem>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <ToggleGroupItem value="list" aria-label="List View" size="sm">
+                  <List className="h-3 w-3" />
+                </ToggleGroupItem>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>List View</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <ToggleGroupItem value="card" aria-label="Card View" size="sm">
+                  <LayoutGrid className="h-3 w-3" />
+                </ToggleGroupItem>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Card View</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <ToggleGroupItem value="canvas" aria-label="Canvas View" size="sm">
+                  <Kanban className="h-3 w-3" />
+                </ToggleGroupItem>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Canvas View</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <ToggleGroupItem value="calendar" aria-label="Calendar View" size="sm">
+                  <Calendar className="h-3 w-3" />
+                </ToggleGroupItem>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Calendar View</p>
+              </TooltipContent>
+            </Tooltip>
           </ToggleGroup>
         )}
 
@@ -301,23 +399,30 @@ const DataTableFilterToolbar: FC<DataTableFilterToolbarProps> = ({
         {Object.values(filters).some(
           (value) => value !== null && value !== ""
         ) && (
-          <Button
-            disabled={isLoading}
-            variant="ghost"
-            className="h-8 px-2 lg:px-3"
-            onClick={() =>
-              setFilters({
-                keyword: null,
-                status: null,
-                priority: null,
-                projectId: null,
-                assigneeId: null,
-              })
-            }
-          >
-            Reset
-            <X />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                disabled={isLoading}
+                variant="ghost"
+                className="h-8 px-2 lg:px-3"
+                onClick={() =>
+                  setFilters({
+                    keyword: null,
+                    status: null,
+                    priority: null,
+                    projectId: null,
+                    assigneeId: null,
+                  })
+                }
+              >
+                Reset
+                <X />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Clear all filters</p>
+            </TooltipContent>
+          </Tooltip>
         )}
       </div>
     </div>

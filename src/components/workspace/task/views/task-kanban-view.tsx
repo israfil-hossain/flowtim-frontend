@@ -12,7 +12,7 @@ import {
   Plus, 
   MoreHorizontal, 
   Calendar, 
-  User, 
+ 
   Flag,
   Clock,
   MessageSquare,

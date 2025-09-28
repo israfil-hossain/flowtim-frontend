@@ -1,5 +1,5 @@
-import { DocumentManager } from "@/components/workspace/documents/document-manager";
+import { DocumentManagerV2 } from "@/components/workspace/documents/document-manager-v2";
 
 export default function Documents() {
-  return <DocumentManager />;
+  return <DocumentManagerV2 />;
 }

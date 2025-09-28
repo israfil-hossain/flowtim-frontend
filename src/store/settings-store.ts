@@ -326,7 +326,9 @@ export const useSettingsStore = create<SettingsStore>()(
         // Notification settings
         setNotificationSetting: (type, setting, enabled) =>
           set((state) => {
-            state.notifications[type][setting] = enabled;
+            if (setting in state.notifications[type]) {
+              (state.notifications[type] as any)[setting] = enabled;
+            }
           }),
           
         // Keyboard shortcuts

@@ -15,6 +15,8 @@ import Chat from "@/page/workspace/Chat";
 import Notifications from "@/page/workspace/Notifications";
 import ProjectTemplatesPage from "@/page/workspace/ProjectTemplates";
 import Analytics from "@/page/workspace/Analytics";
+import Profile from "@/page/workspace/Profile";
+import Appearance from "@/page/workspace/Appearance";
 import { AUTH_ROUTES, BASE_ROUTE, PROTECTED_ROUTES } from "./routePaths";
 import InviteUser from "@/page/invite/InviteUser";
 import Landing from "@/page/Landing";
@@ -45,4 +47,6 @@ export const protectedRoutePaths = [
   { path: PROTECTED_ROUTES.NOTIFICATIONS, element: <Notifications /> },
   { path: PROTECTED_ROUTES.PROJECT_TEMPLATES, element: <ProjectTemplatesPage /> },
   { path: PROTECTED_ROUTES.ANALYTICS, element: <Analytics /> },
+  { path: PROTECTED_ROUTES.PROFILE, element: <Profile /> },
+  { path: PROTECTED_ROUTES.APPEARANCE, element: <Appearance /> },
 ];
