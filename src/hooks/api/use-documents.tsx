@@ -6,7 +6,7 @@ import {
   updateDocumentMutationFn,
   deleteDocumentMutationFn,
 } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 
 export const useGetDocuments = ({
   workspaceId,
@@ -33,21 +33,14 @@ export const useCreateDocument = () => {
   
   return useMutation({
     mutationFn: createDocumentMutationFn,
-    onSuccess: (data, variables) => {
-      toast({
-        title: "Success",
-        description: "Document created successfully",
-      });
+    onSuccess: (_, variables) => {
+      toast.success("Document created successfully");
       queryClient.invalidateQueries({ 
         queryKey: ["documents", variables.workspaceId] 
       });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to create document",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to create document");
     },
   });
 };
@@ -71,11 +64,8 @@ export const useUpdateDocument = () => {
   
   return useMutation({
     mutationFn: updateDocumentMutationFn,
-    onSuccess: (data, variables) => {
-      toast({
-        title: "Success",
-        description: "Document updated successfully",
-      });
+    onSuccess: (_, variables) => {
+      toast.success("Document updated successfully");
       queryClient.invalidateQueries({ 
         queryKey: ["document", variables.workspaceId, variables.documentId] 
       });
@@ -84,11 +74,7 @@ export const useUpdateDocument = () => {
       });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to update document",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to update document");
     },
   });
 };
@@ -98,21 +84,14 @@ export const useDeleteDocument = () => {
   
   return useMutation({
     mutationFn: deleteDocumentMutationFn,
-    onSuccess: (data, variables) => {
-      toast({
-        title: "Success",
-        description: "Document deleted successfully",
-      });
+    onSuccess: (_, variables) => {
+      toast.success("Document deleted successfully");
       queryClient.invalidateQueries({ 
         queryKey: ["documents", variables.workspaceId] 
       });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to delete document",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to delete document");
     },
   });
 };

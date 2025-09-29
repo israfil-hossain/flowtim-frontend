@@ -16,7 +16,7 @@ import { TaskType } from "@/types/api.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useWorkspaceId from "@/hooks/use-workspace-id";
 import { deleteTaskMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 import EditTaskDialog from "../edit-task-dialog"; // Import the Edit Dialog
 
 interface DataTableRowActionsProps {
@@ -29,6 +29,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
 
   const queryClient = useQueryClient();
   const workspaceId = useWorkspaceId();
+
 
   const { mutate, isPending } = useMutation({
     mutationFn: deleteTaskMutationFn,
@@ -44,11 +45,11 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
       {
         onSuccess: (data) => {
           queryClient.invalidateQueries({ queryKey: ["all-tasks", workspaceId] });
-          toast({ title: "Success", description: data.message, variant: "success" });
+          toast.success(data.message);
           setTimeout(() => setOpenDialog(false), 100);
         },
         onError: (error) => {
-          toast({ title: "Error", description: error.message, variant: "destructive" });
+          toast.error(error.message);
         },
       }
     );

@@ -32,13 +32,14 @@ import { TaskPriorityEnum, TaskStatusEnum } from "@/constant";
 import useGetWorkspaceMembers from "@/hooks/api/use-get-workspace-members";
 import { editTaskMutationFn } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 import { TaskType } from "@/types/api.type";
 import { SubtaskList } from "./subtasks/subtask-list";
 
 export default function EditTaskForm({ task, onClose }: { task: TaskType; onClose: () => void }) {
   const queryClient = useQueryClient();
   const workspaceId = useWorkspaceId();
+
 
   const { mutate, isPending } = useMutation({
     mutationFn: editTaskMutationFn,
@@ -101,19 +102,11 @@ export default function EditTaskForm({ task, onClose }: { task: TaskType; onClos
     mutate(payload, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["all-tasks", workspaceId] });
-        toast({
-          title: "Success",
-          description: "Task updated successfully",
-          variant: "success",
-        });
+        toast.success("Task updated successfully");
         onClose();
       },
       onError: (error) => {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
+        toast.error(error.message);
       },
     });
   };

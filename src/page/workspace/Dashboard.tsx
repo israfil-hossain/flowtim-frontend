@@ -8,9 +8,9 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCurrentUser, useWorkspaceAnalytics } from "@/lib/api-service";
-import { useWorkspaceStore, useProjectStore, useUIStore } from "@/store";
+import { useWorkspaceStore, useUIStore } from "@/store";
 import RecentProjects from "@/components/workspace/project/recent-projects";
 import RecentTasks from "@/components/workspace/task/recent-tasks";
 import RecentMembers from "@/components/workspace/member/recent-members";
@@ -22,7 +22,6 @@ import { useState } from "react";
 const WorkspaceDashboard = () => {
   // Store hooks
   const { currentWorkspace } = useWorkspaceStore();
-  // const {} = useProjectStore();
   const { openModal } = useUIStore();
   
   // Local state for smooth transitions

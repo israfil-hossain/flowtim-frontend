@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 import useWorkspaceId from "@/hooks/use-workspace-id";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createProjectMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
 import { useTrackUserActions } from "@/hooks/use-analytics";
 
@@ -36,6 +36,7 @@ export default function CreateProjectForm({
   const queryClient = useQueryClient();
   const workspaceId = useWorkspaceId();
   const { trackProjectCreated } = useTrackUserActions();
+
 
   const [emoji, setEmoji] = useState("📊");
 
@@ -81,21 +82,13 @@ export default function CreateProjectForm({
         // Track project creation
         trackProjectCreated(project._id);
 
-        toast({
-          title: "Success",
-          description: "Project created successfully",
-          variant: "success",
-        });
+        toast.success("Project created successfully");
 
         navigate(`/workspace/${workspaceId}/project/${project._id}`);
         setTimeout(() => onClose(), 500);
       },
       onError: (error) => {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
+        toast.error(error.message);
       },
     });
   };

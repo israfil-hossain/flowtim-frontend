@@ -16,7 +16,7 @@ import { Textarea } from "../ui/textarea";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createWorkspaceMutationFn } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
 import { useTrackUserActions } from "@/hooks/use-analytics";
 
@@ -27,6 +27,7 @@ export default function CreateWorkspaceForm({
 }) {
   const navigate = useNavigate();
   const { trackWorkspaceCreated } = useTrackUserActions();
+
 
   const queryClient = useQueryClient();
 
@@ -66,11 +67,7 @@ export default function CreateWorkspaceForm({
         navigate(`/workspace/${workspace._id}`);
       },
       onError: (error) => {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
+        toast.error(error.message);
       },
     });
   };

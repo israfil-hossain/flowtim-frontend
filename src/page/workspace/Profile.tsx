@@ -16,7 +16,7 @@ const Profile = () => {
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
-    bio: user?.bio || "",
+    bio: "",
   });
 
   const handleInputChange = (field: string, value: string) => {
@@ -52,7 +52,7 @@ const Profile = () => {
     setFormData({
       name: user?.name || "",
       email: user?.email || "",
-      bio: user?.bio || "",
+      bio: "",
     });
     setIsEditing(false);
   };

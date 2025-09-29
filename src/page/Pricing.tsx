@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   Check,
@@ -11,7 +10,6 @@ import {
 } from "lucide-react";
 import AnimationContainer from "@/components/global/animation-container";
 import Wrapper from "@/components/global/wrapper";
-import SectionBadge from "@/components/ui/section-badge";
 import LandingHeader from "@/components/navigation/landing-header";
 import AnimatedSectionBadge from "@/components/ui/animated-section-badge";
 import { useState } from "react";

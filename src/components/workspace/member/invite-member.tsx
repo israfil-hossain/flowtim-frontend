@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuthContext } from "@/context/auth-provider";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 import { CheckIcon, CopyIcon, Loader } from "lucide-react";
 import { BASE_ROUTE } from "@/routes/common/routePaths";
 import PermissionsGuard from "@/components/resuable/permission-guard";
@@ -14,6 +14,7 @@ const InviteMember = () => {
   const { workspace, workspaceLoading } = useAuthContext();
   const { trackInviteSent } = useTrackUserActions();
   const [copied, setCopied] = useState(false);
+
 
   const inviteUrl = workspace
     ? `${window.location.origin}${BASE_ROUTE.INVITE.replace(
@@ -32,11 +33,7 @@ const InviteMember = () => {
           trackInviteSent(workspace._id);
         }
 
-        toast({
-          title: "Copied",
-          description: "Invite url copied to clipboard",
-          variant: "success",
-        });
+        toast.success("Invite url copied to clipboard");
         setTimeout(() => setCopied(false), 2000);
       });
     }

@@ -8,7 +8,7 @@ import {
   getPopularTemplatesQueryFn,
   getTemplateCategoriesQueryFn,
 } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 
 export const useGetPublicTemplates = ({
   category,
@@ -40,21 +40,14 @@ export const useCreateTemplate = () => {
   
   return useMutation({
     mutationFn: createTemplateMutationFn,
-    onSuccess: (data, variables) => {
-      toast({
-        title: "Success",
-        description: "Template created successfully",
-      });
+    onSuccess: (_, variables) => {
+      toast.success("Template created successfully");
       queryClient.invalidateQueries({ 
         queryKey: ["workspace-templates", variables.workspaceId] 
       });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to create template",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to create template");
     },
   });
 };
@@ -72,21 +65,14 @@ export const useCreateProjectFromTemplate = () => {
   
   return useMutation({
     mutationFn: createProjectFromTemplateMutationFn,
-    onSuccess: (data, variables) => {
-      toast({
-        title: "Success",
-        description: "Project created from template successfully",
-      });
+    onSuccess: (_, variables) => {
+      toast.success("Project created from template successfully");
       queryClient.invalidateQueries({ 
         queryKey: ["projects", variables.workspaceId] 
       });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to create project from template",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to create project from template");
     },
   });
 };

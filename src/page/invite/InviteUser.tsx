@@ -13,13 +13,14 @@ import { BASE_ROUTE } from "@/routes/common/routePaths";
 import useAuth from "@/hooks/api/use-auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { invitedUserJoinWorkspaceMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 import { useTrackUserActions } from "@/hooks/use-analytics";
 
 const InviteUser = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { trackWorkspaceJoined } = useTrackUserActions();
+
 
   const param = useParams();
   const inviteCode = param.token as string;
@@ -49,11 +50,7 @@ const InviteUser = () => {
         navigate(`/workspace/${data.workspaceId}`);
       },
       onError: (error) => {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
+        toast.error(error.message);
       },
     });
   };

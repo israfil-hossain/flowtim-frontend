@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import GoogleOauthButton from "@/components/auth/google-oauth-button";
 import { useMutation } from "@tanstack/react-query";
 import { loginMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
 import { useTrackUserActions } from "@/hooks/use-analytics";
 
@@ -31,6 +31,7 @@ const SignIn = () => {
   const [searchParams] = useSearchParams();
   const returnUrl = searchParams.get("returnUrl");
   const { trackSignIn } = useTrackUserActions();
+
 
   const { mutate, isPending } = useMutation({
     mutationFn: loginMutationFn,
@@ -68,11 +69,7 @@ const SignIn = () => {
         navigate(decodedUrl || `/workspace/${user.currentWorkspace}`);
       },
       onError: (error) => {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
+        toast.error(error.message);
       },
     });
   };

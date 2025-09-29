@@ -6,26 +6,19 @@ import {
   createFolderMutationFn,
   getFoldersQueryFn,
 } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 
 export const useUploadFile = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
     mutationFn: uploadFileMutationFn,
-    onSuccess: (data) => {
-      toast({
-        title: "Success",
-        description: "File uploaded successfully",
-      });
+    onSuccess: () => {
+      toast.success("File uploaded successfully");
       queryClient.invalidateQueries({ queryKey: ["files"] });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to upload file",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to upload file");
     },
   });
 };
@@ -58,18 +51,11 @@ export const useDeleteFile = () => {
   return useMutation({
     mutationFn: deleteFileMutationFn,
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "File deleted successfully",
-      });
+      toast.success("File deleted successfully");
       queryClient.invalidateQueries({ queryKey: ["files"] });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to delete file",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to delete file");
     },
   });
 };
@@ -80,18 +66,11 @@ export const useCreateFolder = () => {
   return useMutation({
     mutationFn: createFolderMutationFn,
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Folder created successfully",
-      });
+      toast.success("Folder created successfully");
       queryClient.invalidateQueries({ queryKey: ["folders"] });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to create folder",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to create folder");
     },
   });
 };

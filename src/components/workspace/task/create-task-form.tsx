@@ -40,13 +40,14 @@ import useGetWorkspaceMembers from "@/hooks/api/use-get-workspace-members";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { createTaskMutationFn } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 
 export default function CreateTaskForm(props: {
   projectId?: string;
   onClose: () => void;
 }) {
   const { projectId, onClose } = props;
+
 
   const queryClient = useQueryClient();
   const workspaceId = useWorkspaceId();
@@ -162,19 +163,11 @@ export default function CreateTaskForm(props: {
           queryKey: ["all-tasks", workspaceId],
         });
 
-        toast({
-          title: "Success",
-          description: "Task created successfully",
-          variant: "success",
-        });
+        toast.success("Task created successfully");
         onClose();
       },
       onError: (error) => {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
+        toast.error(error.message);
       },
     });
   };

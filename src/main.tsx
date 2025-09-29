@@ -6,7 +6,7 @@ import { NuqsAdapter } from "nuqs/adapters/react";
 import "./index.css";
 import App from "./App.tsx";
 import QueryProvider from "./context/query-provider.tsx";
-import { Toaster } from "./components/ui/toaster.tsx";
+
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -15,7 +15,7 @@ createRoot(document.getElementById("root")!).render(
         <NuqsAdapter>
           <App />
         </NuqsAdapter>
-        <Toaster />
+
       </QueryProvider>
     </BrowserRouter>
   </StrictMode>

@@ -5,7 +5,7 @@ import {
   getMessagesQueryFn,
   sendMessageMutationFn,
 } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 
 export const useGetChannels = (workspaceId: string) => {
   return useQuery({
@@ -20,21 +20,14 @@ export const useCreateChannel = () => {
   
   return useMutation({
     mutationFn: createChannelMutationFn,
-    onSuccess: (data, variables) => {
-      toast({
-        title: "Success",
-        description: "Channel created successfully",
-      });
+    onSuccess: (_, variables) => {
+      toast.success("Channel created successfully");
       queryClient.invalidateQueries({ 
         queryKey: ["channels", variables.workspaceId] 
       });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to create channel",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to create channel");
     },
   });
 };
@@ -62,17 +55,13 @@ export const useSendMessage = () => {
   
   return useMutation({
     mutationFn: sendMessageMutationFn,
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ 
         queryKey: ["messages", variables.workspaceId, variables.channelId] 
       });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to send message",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to send message");
     },
   });
 };

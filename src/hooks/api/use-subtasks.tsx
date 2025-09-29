@@ -6,7 +6,7 @@ import {
   deleteSubtaskMutationFn,
   getTaskProgressQueryFn,
 } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 
 export const useGetSubtasks = ({
   workspaceId,
@@ -27,11 +27,8 @@ export const useCreateSubtask = () => {
   
   return useMutation({
     mutationFn: createSubtaskMutationFn,
-    onSuccess: (data, variables) => {
-      toast({
-        title: "Success",
-        description: "Subtask created successfully",
-      });
+    onSuccess: (_, variables) => {
+      toast.success("Subtask created successfully");
       queryClient.invalidateQueries({ 
         queryKey: ["subtasks", variables.workspaceId, variables.taskId] 
       });
@@ -41,11 +38,7 @@ export const useCreateSubtask = () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to create subtask",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to create subtask");
     },
   });
 };
@@ -55,22 +48,15 @@ export const useUpdateSubtask = () => {
   
   return useMutation({
     mutationFn: updateSubtaskMutationFn,
-    onSuccess: (data, variables) => {
-      toast({
-        title: "Success",
-        description: "Subtask updated successfully",
-      });
+    onSuccess: (_, variables) => {
+      toast.success("Subtask updated successfully");
       queryClient.invalidateQueries({ 
         queryKey: ["subtasks", variables.workspaceId] 
       });
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to update subtask",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to update subtask");
     },
   });
 };
@@ -80,22 +66,15 @@ export const useDeleteSubtask = () => {
   
   return useMutation({
     mutationFn: deleteSubtaskMutationFn,
-    onSuccess: (data, variables) => {
-      toast({
-        title: "Success",
-        description: "Subtask deleted successfully",
-      });
+    onSuccess: (_, variables) => {
+      toast.success("Subtask deleted successfully");
       queryClient.invalidateQueries({ 
         queryKey: ["subtasks", variables.workspaceId] 
       });
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to delete subtask",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to delete subtask");
     },
   });
 };

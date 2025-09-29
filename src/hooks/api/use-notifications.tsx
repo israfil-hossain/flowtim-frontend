@@ -6,7 +6,7 @@ import {
   getNotificationPreferencesQueryFn,
   updateNotificationPreferencesMutationFn,
 } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 
 export const useGetNotifications = ({
   userId,
@@ -31,17 +31,13 @@ export const useMarkNotificationAsRead = () => {
   
   return useMutation({
     mutationFn: markNotificationAsReadMutationFn,
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ 
         queryKey: ["notifications", variables.userId] 
       });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to mark notification as read",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to mark notification as read");
     },
   });
 };
@@ -51,21 +47,14 @@ export const useMarkAllNotificationsAsRead = () => {
   
   return useMutation({
     mutationFn: markAllNotificationsAsReadMutationFn,
-    onSuccess: (data, variables) => {
-      toast({
-        title: "Success",
-        description: "All notifications marked as read",
-      });
+    onSuccess: (_, variables) => {
+      toast.success("All notifications marked as read");
       queryClient.invalidateQueries({ 
         queryKey: ["notifications", variables] 
       });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to mark all notifications as read",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to mark all notifications as read");
     },
   });
 };
@@ -83,21 +72,14 @@ export const useUpdateNotificationPreferences = () => {
   
   return useMutation({
     mutationFn: updateNotificationPreferencesMutationFn,
-    onSuccess: (data, variables) => {
-      toast({
-        title: "Success",
-        description: "Notification preferences updated successfully",
-      });
+    onSuccess: (_, variables) => {
+      toast.success("Notification preferences updated successfully");
       queryClient.invalidateQueries({ 
         queryKey: ["notification-preferences", variables.userId] 
       });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to update notification preferences",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to update notification preferences");
     },
   });
 };

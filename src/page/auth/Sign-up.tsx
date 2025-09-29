@@ -22,13 +22,14 @@ import { Input } from "@/components/ui/input";
 import GoogleOauthButton from "@/components/auth/google-oauth-button";
 import { useMutation } from "@tanstack/react-query";
 import { registerMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
 import { useTrackUserActions } from "@/hooks/use-analytics";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const { trackSignUp } = useTrackUserActions();
+
 
   const { mutate, isPending } = useMutation({
     mutationFn: registerMutationFn,
@@ -66,11 +67,7 @@ const SignUp = () => {
       },
       onError: (error) => {
         console.log(error);
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
+        toast.error(error.message);
       },
     });
   };

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editTaskMutationFn, deleteTaskMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 
 export const useEditTask = () => {
   const queryClient = useQueryClient();
@@ -9,18 +9,11 @@ export const useEditTask = () => {
     mutationFn: editTaskMutationFn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["all-tasks"] });
-      toast({
-        title: "Success",
-        description: "Task updated successfully",
-      });
+      toast.success("Task updated successfully");
     },
     onError: (error) => {
       console.error("Error updating task:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update task",
-        variant: "destructive",
-      });
+      toast.error("Failed to update task");
     },
   });
 };
@@ -32,18 +25,11 @@ export const useDeleteTask = () => {
     mutationFn: deleteTaskMutationFn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["all-tasks"] });
-      toast({
-        title: "Success",
-        description: "Task deleted successfully",
-      });
+      toast.success("Task deleted successfully");
     },
     onError: (error) => {
       console.error("Error deleting task:", error);
-      toast({
-        title: "Error",
-        description: "Failed to delete task",
-        variant: "destructive",
-      });
+      toast.error("Failed to delete task");
     },
   });
 };

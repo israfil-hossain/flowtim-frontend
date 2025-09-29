@@ -12,7 +12,6 @@ import {
   Bell, 
   Check,
   CheckCheck,
-  Trash2,
   Settings,
   User,
   MessageSquare,
@@ -27,7 +26,6 @@ import { getAvatarColor, getAvatarFallbackText } from "@/lib/helper";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
-  DropdownMenuItem, 
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel
@@ -127,8 +125,8 @@ export const NotificationDropdown: FC = () => {
   ];
 
   // Use API hook (with fallback for development)
-  const { data: notificationData, isLoading, error } = useGetNotifications({
-    userId: user?.id || '',
+  const { data: notificationData, isLoading } = useGetNotifications({
+    userId: user?._id || '',
     page,
     limit: 10,
   });
@@ -204,10 +202,10 @@ export const NotificationDropdown: FC = () => {
   const unreadCount = allNotifications.filter(n => !n.isRead).length;
 
   const markAsRead = (notificationId: string) => {
-    if (user?.id) {
+    if (user?._id) {
       markAsReadMutation.mutate({
         notificationId,
-        userId: user.id
+        userId: user._id
       });
       
       // Optimistic update
@@ -218,8 +216,8 @@ export const NotificationDropdown: FC = () => {
   };
 
   const markAllAsRead = () => {
-    if (user?.id) {
-      markAllAsReadMutation.mutate(user.id);
+    if (user?._id) {
+      markAllAsReadMutation.mutate(user._id);
       
       // Optimistic update
       setAllNotifications(prev => prev.map(n => ({ ...n, isRead: true })));

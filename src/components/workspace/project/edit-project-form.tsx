@@ -23,7 +23,7 @@ import { ProjectType } from "@/types/api.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useWorkspaceId from "@/hooks/use-workspace-id";
 import { editProjectMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
 
 export default function EditProjectForm(props: {
@@ -33,6 +33,7 @@ export default function EditProjectForm(props: {
   const { project, onClose } = props;
   const workspaceId = useWorkspaceId();
   const queryClient = useQueryClient();
+
 
   const [emoji, setEmoji] = useState("📊");
 
@@ -86,20 +87,12 @@ export default function EditProjectForm(props: {
           queryKey: ["allprojects", workspaceId],
         });
 
-        toast({
-          title: "Success",
-          description: data.message,
-          variant: "success",
-        });
+        toast.success(data.message);
 
         setTimeout(() => onClose(), 100);
       },
       onError: (error) => {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
+        toast.error(error.message);
       },
     });
   };

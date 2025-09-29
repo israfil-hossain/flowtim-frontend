@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUserProfileMutationFn, uploadUserAvatarMutationFn } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 
 export const useUpdateProfile = () => {
   const queryClient = useQueryClient();
@@ -8,18 +8,11 @@ export const useUpdateProfile = () => {
   return useMutation({
     mutationFn: updateUserProfileMutationFn,
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Profile updated successfully",
-      });
+      toast.success("Profile updated successfully");
       queryClient.invalidateQueries({ queryKey: ["current-user"] });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to update profile",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to update profile");
     },
   });
 };
@@ -30,18 +23,11 @@ export const useUploadAvatar = () => {
   return useMutation({
     mutationFn: uploadUserAvatarMutationFn,
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Profile picture updated successfully",
-      });
+      toast.success("Profile picture updated successfully");
       queryClient.invalidateQueries({ queryKey: ["current-user"] });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to update profile picture",
-        variant: "destructive",
-      });
+      toast.error(error.response?.data?.message || "Failed to update profile picture");
     },
   });
 };
