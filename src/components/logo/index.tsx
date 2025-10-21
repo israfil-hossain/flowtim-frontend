@@ -6,8 +6,8 @@ const Logo = (props: { url?: string }) => {
   return (
     <div className="flex items-center justify-center sm:justify-start">
       <Link to={url}>
-        <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary text-primary-foreground">
-          <img src="/images/short-logo.png" alt="logo" width={40} height={40} />
+        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <img src="/images/short-logo.png" alt="logo" width={48} height={48} />
         </div>
       </Link>
     </div>

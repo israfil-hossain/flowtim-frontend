@@ -1,6 +1,6 @@
 import { CustomError } from "@/types/custom-error.type";
 import axios from "axios";
-import { attemptAuthRecovery } from "./auth-fallback";
+import { authService } from "@/services/auth.service";
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -12,24 +12,24 @@ const options = {
 
 const API = axios.create(options);
 
-// Add request interceptor for debugging and token handling
+// Add request interceptor for security headers and token handling
 API.interceptors.request.use((config) => {
-  // Debug logging only in production
+  // Primary authentication via cookies, fallback to sessionStorage token
+  const accessToken = authService.getAccessToken();
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+
+  // Security headers removed due to CORS restrictions
+  // Backend should handle security headers
+  
+  // Debug logging only in production for security monitoring
   if (import.meta.env.PROD) {
     console.log(`🔗 API Request: ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
     console.log('📍 Origin:', window.location.origin);
-    console.log('🍪 Document cookies:', document.cookie ? 'Present' : 'None');
+    console.log('🍪 Cookies available:', document.cookie ? 'Yes' : 'No');
+    console.log('🔑 Session token:', accessToken ? 'Present' : 'None');
     console.log('⚙️ withCredentials:', config.withCredentials);
-    
-    // Log specific cookies for debugging
-    if (document.cookie) {
-      const cookies = document.cookie.split(';').reduce((acc, cookie) => {
-        const [name, value] = cookie.trim().split('=');
-        acc[name] = value;
-        return acc;
-      }, {} as Record<string, string>);
-      console.log('🍪 Available cookies:', Object.keys(cookies));
-    }
   }
   
   return config;
@@ -59,21 +59,24 @@ API.interceptors.response.use(
       console.error('Cookies at time of error:', document.cookie ? 'Present' : 'None');
     }
 
-    // Robust 401 recovery in production
-    if (status === 401 && !originalRequest?._retry && import.meta.env.PROD) {
+    // Robust 401 recovery 
+    if (status === 401 && !originalRequest?._retry) {
       originalRequest._retry = true;
       
-      console.log('🔄 401 detected, attempting recovery...');
+      console.log('🔄 401 detected, attempting token refresh...');
       
       try {
-        const recovered = await attemptAuthRecovery();
+        await authService.refreshToken();
+        const newToken = authService.getAccessToken();
         
-        if (recovered) {
-          console.log('✅ Retrying original request after recovery');
+        if (newToken) {
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+          console.log('✅ Retrying original request with new token');
           return API(originalRequest);
         }
       } catch (recoveryError) {
-        console.error('❌ Recovery failed:', recoveryError);
+        console.error('❌ Token refresh failed:', recoveryError);
+        authService.clearTokens();
       }
     }
 

@@ -17,7 +17,13 @@ import ProjectTemplatesPage from "@/page/workspace/ProjectTemplates";
 import Analytics from "@/page/workspace/Analytics";
 import Profile from "@/page/workspace/Profile";
 import Appearance from "@/page/workspace/Appearance";
-import { AUTH_ROUTES, BASE_ROUTE, PROTECTED_ROUTES } from "./routePaths";
+import AdminDashboard from "@/page/admin/Dashboard";
+import AdminUsers from "@/page/admin/Users";
+import AdminWorkspaces from "@/page/admin/Workspaces";
+import AdminAnalytics from "@/page/admin/Analytics";
+import AdminSettings from "@/page/admin/Settings";
+import AdminBilling from "@/page/admin/Billing";
+import { AUTH_ROUTES, BASE_ROUTE, PROTECTED_ROUTES, ADMIN_ROUTES } from "./routePaths";
 import InviteUser from "@/page/invite/InviteUser";
 import Landing from "@/page/Landing";
 
@@ -49,4 +55,13 @@ export const protectedRoutePaths = [
   { path: PROTECTED_ROUTES.ANALYTICS, element: <Analytics /> },
   { path: PROTECTED_ROUTES.PROFILE, element: <Profile /> },
   { path: PROTECTED_ROUTES.APPEARANCE, element: <Appearance /> },
+];
+
+export const adminRoutePaths = [
+  { path: ADMIN_ROUTES.DASHBOARD, element: <AdminDashboard /> },
+  { path: ADMIN_ROUTES.USERS, element: <AdminUsers /> },
+  { path: ADMIN_ROUTES.WORKSPACES, element: <AdminWorkspaces /> },
+  { path: ADMIN_ROUTES.ANALYTICS, element: <AdminAnalytics /> },
+  { path: ADMIN_ROUTES.SETTINGS, element: <AdminSettings /> },
+  { path: ADMIN_ROUTES.BILLING, element: <AdminBilling /> },
 ];

@@ -71,11 +71,8 @@ export const useAuthStore = create<AuthStore>()(
         setToken: (token) =>
           set((state) => {
             state.token = token;
-            if (token) {
-              localStorage.setItem('auth_token', token);
-            } else {
-              localStorage.removeItem('auth_token');
-            }
+            // Don't store tokens in localStorage for security
+            // Rely on httpOnly cookies and sessionStorage as fallback
           }),
           
         setAuthenticated: (isAuthenticated) =>
@@ -118,13 +115,13 @@ export const useAuthStore = create<AuthStore>()(
             state.error = null;
             state.showLoginModal = false;
             
-            if (token) {
-              localStorage.setItem('auth_token', token);
-            }
-            
-            // Store user data if remember me is enabled
-            if (state.rememberMe) {
-              localStorage.setItem('user_data', JSON.stringify(user));
+            // Don't store sensitive data in localStorage for security
+            // Use sessionStorage only for non-sensitive data if needed
+            if (state.rememberMe && user) {
+              sessionStorage.setItem('user_preferences', JSON.stringify({
+                theme: 'light',
+                language: 'en'
+              }));
             }
           }),
           
@@ -136,9 +133,10 @@ export const useAuthStore = create<AuthStore>()(
             state.error = null;
             state.showLoginModal = false;
             
-            // Clear stored data
-            localStorage.removeItem('auth_token');
-            localStorage.removeItem('user_data');
+            // Clear all stored data securely
+            sessionStorage.removeItem('flowtim_access_token');
+            sessionStorage.removeItem('flowtim_refresh_token');
+            sessionStorage.removeItem('user_preferences');
           }),
           
         updateUser: (updates) =>
@@ -146,9 +144,12 @@ export const useAuthStore = create<AuthStore>()(
             if (state.user) {
               state.user = { ...state.user, ...updates };
               
-              // Update stored user data if remember me is enabled
+              // Only store non-sensitive preferences
               if (state.rememberMe) {
-                localStorage.setItem('user_data', JSON.stringify(state.user));
+                sessionStorage.setItem('user_preferences', JSON.stringify({
+                  theme: 'light',
+                  language: 'en'
+                }));
               }
             }
           }),

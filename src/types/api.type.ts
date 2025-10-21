@@ -26,6 +26,7 @@ export type UserType = {
   email: string;
   profilePicture: string | null;
   isActive: true;
+  isAdmin?: boolean;
   lastLogin: null;
   createdAt: Date;
   updatedAt: Date;

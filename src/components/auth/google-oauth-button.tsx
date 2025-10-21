@@ -1,4 +1,3 @@
-import { baseURL } from "@/lib/base-url";
 import { Button } from "../ui/button";
 import { useTrackUserActions } from "@/hooks/use-analytics";
 
@@ -14,7 +13,12 @@ const GoogleOauthButton = (props: { label: string }) => {
       trackSignUp('google');
     }
 
-    window.location.href = `${baseURL}/auth/google`;
+    // Use full backend URL for OAuth (proxy doesn't work with window.location redirects)
+    const backendURL = import.meta.env.VITE_API_BASE_URL?.startsWith('/')
+      ? 'http://localhost:8000/api'
+      : import.meta.env.VITE_API_BASE_URL;
+
+    window.location.href = `${backendURL}/auth/google`;
   };
   return (
     <Button

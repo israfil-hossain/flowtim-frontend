@@ -14,12 +14,15 @@ import LogoutDialog from "./logout-dialog";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
+import { NavAdmin } from "./nav-admin";
 import { Separator } from "../ui/separator";
 import useWorkspaceId from "@/hooks/use-workspace-id";
+import { useAuthContext } from "@/context/auth-provider";
 
 const Asidebar = () => {
 
   const { open } = useSidebar();
+  const { user } = useAuthContext();
   const workspaceId = useWorkspaceId();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -37,9 +40,9 @@ const Asidebar = () => {
                 <img
                   src="/images/long-logo.png"
                   alt="Flowtim Logo"
-                  width={120}
-                  height={30}
-                  className="h-8 w-auto"
+                  width={160}
+                  height={40}
+                  className="h-10 w-auto"
                 />
               </Link>
             ) : (
@@ -57,6 +60,7 @@ const Asidebar = () => {
               <NavProjects />
             </SidebarGroupContent>
           </SidebarGroup>
+          {user?.isAdmin && <NavAdmin />}
         </SidebarContent>
         <SidebarRail />
       </Sidebar>

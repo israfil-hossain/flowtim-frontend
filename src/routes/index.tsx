@@ -4,6 +4,7 @@ import AuthRoute from "./auth.route";
 import {
   authenticationRoutePaths,
   protectedRoutePaths,
+  adminRoutePaths,
 } from "./common/routes";
 import AppLayout from "@/layout/app.layout";
 import BaseLayout from "@/layout/base.layout";
@@ -45,6 +46,13 @@ function AppRoutes() {
       <Route path="/" element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
           {protectedRoutePaths.map((route) => (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={route.element}
+            />
+          ))}
+          {adminRoutePaths.map((route) => (
             <Route
               key={route.path}
               path={route.path}

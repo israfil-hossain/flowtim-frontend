@@ -29,14 +29,48 @@ import {
 export const loginMutationFn = async (
   data: loginType
 ): Promise<LoginResponseType> => {
-  const response = await API.post("/auth/login", data);
-  return response.data;
+  const response = await fetch('/api/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Login failed');
+  }
+
+  const result = await response.json();
+
+  // Only store access token in sessionStorage as fallback
+  // Primary authentication relies on httpOnly cookies
+  if (result.tokens?.accessToken) {
+    sessionStorage.setItem('flowtim_access_token', result.tokens.accessToken);
+  }
+
+  return result;
 };
 
 export const registerMutationFn = async (data: registerType) =>
   await API.post("/auth/register", data);
 
-export const logoutMutationFn = async () => await API.post("/auth/logout");
+export const logoutMutationFn = async () => {
+  try {
+    await fetch('/api/auth/logout', {
+      method: 'POST',
+      credentials: 'include',
+    });
+  } catch (error) {
+    console.error('Logout request failed:', error);
+  }
+
+  // Clear session storage tokens
+  sessionStorage.removeItem('flowtim_access_token');
+  sessionStorage.removeItem('flowtim_refresh_token');
+};
 
 export const getCurrentUserQueryFn =
   async (): Promise<CurrentUserResponseType> => {

@@ -32,3 +32,12 @@ export const BASE_ROUTE = {
   LANDING: "/",
   INVITE: "/invite/:token",
 };
+
+export const ADMIN_ROUTES = {
+  DASHBOARD: "/admin",
+  USERS: "/admin/users",
+  WORKSPACES: "/admin/workspaces",
+  ANALYTICS: "/admin/analytics",
+  SETTINGS: "/admin/settings",
+  BILLING: "/admin/billing",
+};

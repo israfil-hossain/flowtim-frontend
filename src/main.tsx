@@ -6,16 +6,18 @@ import { NuqsAdapter } from "nuqs/adapters/react";
 import "./index.css";
 import App from "./App.tsx";
 import QueryProvider from "./context/query-provider.tsx";
+import { AuthProvider } from "./context/auth-provider.tsx";
 
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <QueryProvider>
-        <NuqsAdapter>
-          <App />
-        </NuqsAdapter>
-
+        <AuthProvider>
+          <NuqsAdapter>
+            <App />
+          </NuqsAdapter>
+        </AuthProvider>
       </QueryProvider>
     </BrowserRouter>
   </StrictMode>
